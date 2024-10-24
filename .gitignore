@@ -1,4 +1,5 @@
 /node_modules
 /misc
-/credential.ts
+src/secrets/credential.ts
 /allure-results
+/src/test/test-case

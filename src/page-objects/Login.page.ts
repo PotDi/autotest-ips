@@ -55,5 +55,5 @@ class LoginPage extends PageObject {
 }
 
 export {
-    LoginPage
+    LoginPage,
 }

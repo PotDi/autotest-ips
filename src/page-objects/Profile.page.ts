@@ -9,9 +9,6 @@ class ProfilePage extends PageObject {
         super(browser)
 
     }
-    public iSDisplayedNameTitle(): Promise<boolean> {
-        return this.getNameTitle().isDisplayed()
-    }
     public async WaitForDisplayedProfileForm(): Promise<void> {
         await this.getProfileName().waitForClickable({
             timeoutMsg: 'Profile Form was not clickable'
@@ -35,6 +32,12 @@ class ProfilePage extends PageObject {
         })
         await this.getProfileEmail().setValue(email)
     }
+    public async setProfilePronouns(pronous: string): Promise<void> {
+        await this.getProfilePronouns().waitForDisplayed({
+            timeoutMsg: 'Pronous was not displayed'
+        })
+        await this.getProfilePronouns().setValue(pronous)
+    }
     public async submit(): Promise<void> {
         await this.getProfileButtonUpdate().waitForClickable({
             timeoutMsg: 'Button Update was not clickable'
@@ -53,7 +56,7 @@ class ProfilePage extends PageObject {
         return browser.$('//*[@id="user_profile_name"]')
     }
     private getProfileBio(): ChainablePromiseElement<WebdriverIO.Element> {
-        return browser.$('[@id="user_profile_bio"]')
+        return browser.$('//*[@id="user_profile_bio"]')
     }
     private getProfileEmail(): ChainablePromiseElement<WebdriverIO.Element> {
         return browser.$('[@id="user_profile_email"]')
@@ -61,14 +64,8 @@ class ProfilePage extends PageObject {
     private getProfilePronouns(): ChainablePromiseElement<WebdriverIO.Element> {
         return browser.$('[@id="user_profile_pronouns_select"]')
     }
-    private getProfileAvatar(): ChainablePromiseElement<WebdriverIO.Element> {
-        return browser.$('//summary/div')
-    }
     private getProfileButtonUpdate(): ChainablePromiseElement<WebdriverIO.Element> {
         return browser.$('//*[contains(span, "Update profile")]/span/*')
-    }
-    private getNameTitle(): ChainablePromiseElement<WebdriverIO.Element> {
-        return browser.$('//*[@id="settings-header"]/a')
     }
 
 

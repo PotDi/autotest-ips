@@ -7,23 +7,37 @@ class PersonalPage extends PageObject {
     constructor(browser: WebdriverIO.Browser) {
         super(browser)
     }
-    public isDisplayedName(): Promise<boolean> {
-        return this.getName().isDisplayed()
+
+    public getTextName(): Promise<string> {
+        return this.getName().getText()
     }
-    public isDisplayedBio(): Promise<boolean> {
-        return this.getBio().isDisplayed()
+
+    public getTextBio(): Promise<string> {
+        return this.getBio().getText()
     }
-    public isDisplayedPronouns(): Promise<boolean> {
-        return this.getPronouns().isDisplayed()
+
+    public getTextPronouns(): Promise<string> { //дождаться текста
+        return this.getPronouns().getText()
     }
+
+    public getTextEmail(): Promise<string> {
+        return this.getEmail().getText()
+    }
+
     private getName(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@itemprop="name"]')
     }
+
     private getBio(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@data-bio-text]')
     }
+
     private getPronouns(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('[@itemprop="pronouns"]')
+        return this.browser.$('//*[@itemprop="pronouns"]')
+    }
+
+    private getEmail(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[@itemprop="email"]')
     }
 
 }

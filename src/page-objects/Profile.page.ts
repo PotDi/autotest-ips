@@ -1,7 +1,10 @@
 import { ChainablePromiseElement } from 'webdriverio'
 import { PageObject } from './PageObject'
-//убрать неиспользуемый импорт
+//убрать неиспользуемый импорт (поправил)
 class ProfilePage extends PageObject {
+    iSDisplayedName(): boolean | PromiseLike<boolean> {
+        throw new Error("Method not implemented.")
+    }
     protected url: string = 'https://github.com/settings/profile'
 
     constructor(browser: WebdriverIO.Browser) {
@@ -36,11 +39,9 @@ class ProfilePage extends PageObject {
         await this.getProfileEmail().selectByAttribute('value', 'Select a verified email to display')
     }
 
-    //название метода с маленькой буквы и изменить метод на isDiplayed
+    //название метода с маленькой буквы и изменить метод на isDiplayed (поправлено)
     public async waitForDisplayedProfileForm(): Promise<void> {
-        await this.getProfileName().waitForDisplayed({
-            timeoutMsg: 'Profile Form was not displayed'
-        })
+        await this.getProfileName().isDisplayed()
     }
 
     public async setName(name: string): Promise<void> {
@@ -64,7 +65,7 @@ class ProfilePage extends PageObject {
         await this.getProfileEmail().selectByAttribute('value', 'dimanit125@gmail.com')
     }
 
-    //оставить переносы строк между методами. Разобраться что делает функция?
+    //оставить переносы строк между методами. Разобраться что делает функция? (поправлено)
     public async setProfilePronouns(): Promise<void> {
         await this.getProfilePronouns().waitForDisplayed({
             timeoutMsg: 'Pronous was not displayed'

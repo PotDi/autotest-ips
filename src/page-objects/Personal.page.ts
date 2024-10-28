@@ -24,6 +24,14 @@ class PersonalPage extends PageObject {
         return this.getEmail().getText()
     }
 
+    public SaveAvatar(): Promise<Buffer> {
+        return this.getAvatar().saveScreenshot('../common/')
+    }
+
+    public isDisplayedName(): Promise<boolean> {
+        return this.getName().isDisplayed()
+    }
+
     private getName(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@itemprop="name"]')
     }
@@ -38,6 +46,9 @@ class PersonalPage extends PageObject {
 
     private getEmail(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@itemprop="email"]')
+    }
+    private getAvatar(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('[//*[@id="upload-avatar-link"]')
     }
 
 }

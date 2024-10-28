@@ -1,12 +1,14 @@
 import { LoginPage } from "../../page-objects/Login.page"
 import { PersonalPage } from "../../page-objects/Personal.page"
 import { ProfilePage } from "../../page-objects/Profile.page"
+import { UploadFile } from "../../page-objects/UploadFile"
 import { auth, data } from '../../secrets/credential'
 
 describe('Settings', () => {
     let loginPage: LoginPage
     let profilePage: ProfilePage
     let personalPage: PersonalPage
+    let uploadFile: UploadFile
 
     before(async () => {
         loginPage = new LoginPage(browser)
@@ -28,6 +30,16 @@ describe('Settings', () => {
         await personalPage.open()
         const getTextName: string = await personalPage.getTextName()
         expect(getTextName).toHaveText(data.name)
+    })
+
+    it('Validate input empty name', async () => {
+        await profilePage.clearInputName()
+        await profilePage.submit()
+
+        //переименовать переменную и с маленькой буквой (поправил)
+        await personalPage.open()
+        const inDisplayedNametoText: boolean = await personalPage.isDisplayedName()
+        expect(inDisplayedNametoText).toEqual(false)
     })
 
     it('Validate input bio', async () => {
@@ -57,5 +69,13 @@ describe('Settings', () => {
         const getTextPronouns: string = await personalPage.getTextEmail()
         expect(getTextPronouns).toHaveText('dimanit125@gmail.com')
     })
+
+    // it('Upload file', async () => {
+    //     await uploadFile.uploadFile('../../common/Character 1.png')
+    //     await profilePage.submit()
+
+    //     await personalPage.open()
+
+    // })
 
 })

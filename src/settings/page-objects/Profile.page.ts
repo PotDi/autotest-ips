@@ -1,5 +1,5 @@
 import { ChainablePromiseElement } from 'webdriverio'
-import { PageObject } from './PageObject'
+import { PageObject } from '../../page-objects/PageObject'
 //убрать неиспользуемый импорт (поправил)
 class ProfilePage extends PageObject {
     iSDisplayedName(): boolean | PromiseLike<boolean> {

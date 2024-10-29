@@ -1,4 +1,4 @@
-import { PageObject } from "./PageObject";
+import { PageObject } from "../../page-objects/PageObject";
 import { ChainablePromiseElement } from 'webdriverio';
 
 class PersonalPage extends PageObject {

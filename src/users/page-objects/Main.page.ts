@@ -1,5 +1,5 @@
 import { ChainablePromiseElement } from 'webdriverio'
-import { PageObject } from './PageObject'
+import { PageObject } from '../../page-objects/PageObject'
 
 class MainPage extends PageObject {
     private getUserLOgin(): ChainablePromiseElement<WebdriverIO.Element> {

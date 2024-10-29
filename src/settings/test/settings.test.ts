@@ -1,7 +1,7 @@
-import { LoginPage } from "../../page-objects/Login.page"
-import { PersonalPage } from "../../page-objects/Personal.page"
-import { ProfilePage } from "../../page-objects/Profile.page"
-import { UploadFile } from "../../page-objects/UploadFile"
+import { LoginPage } from "../../users/page-objects/Login.page"
+import { PersonalPage } from "../page-objects/Personal.page"
+import { ProfilePage } from "../page-objects/Profile.page"
+import { UploadFile } from "../page-objects/UploadFile"
 import { auth, data } from '../../secrets/credential'
 
 describe('Settings', () => {
@@ -61,7 +61,7 @@ describe('Settings', () => {
         expect(getTextPronouns).toHaveText('he/him')
     })
 
-    it('Validate input email', async () => {
+    it('Validate select email', async () => {
         await profilePage.setEmail()
         await profilePage.submit()
 

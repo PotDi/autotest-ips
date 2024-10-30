@@ -3,6 +3,7 @@ import { PersonalPage } from "../page-objects/Personal.page"
 import { ProfilePage } from "../page-objects/Profile.page"
 import { UploadFile } from "../page-objects/UploadFile"
 import { auth, data } from '../../secrets/credential'
+import { IMAGE_PATH } from "../../common/data/image.data"
 
 describe('Settings', () => {
     let loginPage: LoginPage
@@ -70,12 +71,12 @@ describe('Settings', () => {
         expect(getTextPronouns).toHaveText('dimanit125@gmail.com')
     })
 
-    // it('Upload file', async () => {
-    //     await uploadFile.uploadFile('../../common/Character 1.png')
-    //     await profilePage.submit()
+    it('Upload file', async () => {
+        await uploadFile.uploadFile(IMAGE_PATH)
+        await profilePage.submit()
 
-    //     await personalPage.open()
+        await personalPage.open()
 
-    // })
+    })
 
 })

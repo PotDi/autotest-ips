@@ -9,41 +9,48 @@ class IssuePage extends PageObject {
         super(browser)
     }
 
+    public getTextTitleIssue(): Promise<string> {
+        return this.getTitleIssue().getText()
+    }
     public async createNewIssue(): Promise<void> {
-        await this.getNewIssue().waitForDisplayed({
+        await this.getButtonNewIssue().waitForDisplayed({
             timeoutMsg: 'Button new issue was not displayed'
         })
-        await this.getNewIssue().click()
+        await this.getButtonNewIssue().click()
     }
 
     public async setTitleIssue(title: string): Promise<void> {
-        await this.getTitleIssue().waitForDisplayed({
+        await this.getTitleNewIssue().waitForDisplayed({
             timeoutMsg: 'Input title Issue was not displayed'
         })
-        await this.getTitleIssue().setValue(title)
+        await this.getTitleNewIssue().setValue(title)
     }
 
     public async setDescriptionIssue(description: string): Promise<void> {
-        await this.getBodyIssue().waitForDisplayed({
+        await this.getBodyNewIssue().waitForDisplayed({
             timeoutMsg: 'Input description Issue was not displayed'
         })
-        await this.getBodyIssue().setValue(description)
+        await this.getBodyNewIssue().setValue(description)
     }
 
-    private getNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getButtonNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="repo-content-turbo-frame"]/div/div/child::div[2]')
     }
 
-    private getTitleIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getTitleNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="issue_title"]')
     }
 
-    private getBodyIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getBodyNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('id="issue_body"')
     }
 
     private getSubmitIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//button[contains(text(), "submit")]')
+    }
+
+    private getTitleIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[@id="issue_1_link"]')
     }
 
     public async createIssue(issue: IssueModel): Promise<void> {
@@ -54,4 +61,8 @@ class IssuePage extends PageObject {
 
     }
 
+}
+
+export {
+    IssuePage,
 }

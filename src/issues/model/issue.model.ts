@@ -16,3 +16,8 @@ function createIssueModel(entities?: Partial<IssueModel>): IssueModel {
         description: entities?.description ?? getRandomString(6),
     }
 }
+
+export {
+    IssueModel,
+    createIssueModel,
+}

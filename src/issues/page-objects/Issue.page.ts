@@ -1,5 +1,6 @@
 import { PageObject } from "../../page-objects/PageObject";
 import { ChainablePromiseElement } from 'webdriverio';
+import { IssueModel } from "../model/issue.model";
 
 class IssuePage extends PageObject {
     protected url: string = 'https://github.com/PotDi/autotest-ips/issues'
@@ -43,6 +44,14 @@ class IssuePage extends PageObject {
 
     private getSubmitIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//button[contains(text(), "submit")]')
+    }
+
+    public async createIssue(issue: IssueModel): Promise<void> {
+        await this.createNewIssue()
+        await this.setTitleIssue(issue.title)
+        await this.setDescriptionIssue(issue.description)
+        await this.getSubmitIssue().click()
+
     }
 
 }

@@ -13,6 +13,10 @@ class IssuePage extends PageObject {
         await this.getTitleIssue().isDisplayed()
         return this.getTitleIssue().getText()
     }
+    public async getTextDerscriptionIssue(): Promise<string> {
+        await this.getDescriptionIssue().isDisplayed()
+        return await this.getDescriptionIssue().getText()
+    }
     public async createNewIssue(): Promise<void> {
         await this.getButtonNewIssue().waitForDisplayed({
             timeoutMsg: 'Button new issue was not displayed'
@@ -57,6 +61,10 @@ class IssuePage extends PageObject {
 
     private getTitleIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//bdi')
+    }
+
+    private getDescriptionIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//p[@dir="auto"]')
     }
 
     public async createIssue(issue: IssueModel): Promise<void> {

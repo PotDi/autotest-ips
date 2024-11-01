@@ -22,7 +22,7 @@ describe('Create Issue', () => {
 
     // })
 
-    it('with title and description', async () => {
+    it('Validate with title and description', async () => {
         await issuePage.createIssue(issue)
 
         const getTextTitleIssue: string = await issuePage.getTextTitleIssue()

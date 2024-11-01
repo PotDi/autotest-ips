@@ -8,19 +8,23 @@ class PersonalPage extends PageObject {
         super(browser)
     }
 
-    public getTextName(): Promise<string> {
+    public async getTextName(): Promise<string> {
+        await this.getName().isDisplayed()
         return this.getName().getText()
     }
 
-    public getTextBio(): Promise<string> {
+    public async getTextBio(): Promise<string> {
+        await this.getBio().isDisplayed()
         return this.getBio().getText()
     }
 
-    public getTextPronouns(): Promise<string> { //дождаться текста
+    public async getTextPronouns(): Promise<string> {
+        await this.getPronouns().isDisplayed() //дождаться текста
         return this.getPronouns().getText()
     }
 
-    public getTextEmail(): Promise<string> {
+    public async getTextEmail(): Promise<string> {
+        await this.getEmail().isDisplayed()
         return this.getEmail().getText()
     }
 

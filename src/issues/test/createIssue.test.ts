@@ -12,6 +12,7 @@ describe('Create Issue', () => {
 
     before(async () => {
         loginPage = new LoginPage(browser)
+        issuePage = new IssuePage(browser)
         await loginPage.open()
         await loginPage.login(user)
         await issuePage.open()
@@ -21,7 +22,7 @@ describe('Create Issue', () => {
 
     // })
 
-    it('Create issue with title and description', async () => {
+    it('with title and description', async () => {
         await issuePage.createIssue(issue)
 
         const getTextTitleIssue: string = await issuePage.getTextTitleIssue()

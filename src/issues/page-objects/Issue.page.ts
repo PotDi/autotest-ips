@@ -9,7 +9,8 @@ class IssuePage extends PageObject {
         super(browser)
     }
 
-    public getTextTitleIssue(): Promise<string> {
+    public async getTextTitleIssue(): Promise<string> {
+        await this.getTitleIssue().isDisplayed()
         return this.getTitleIssue().getText()
     }
     public async createNewIssue(): Promise<void> {
@@ -33,8 +34,13 @@ class IssuePage extends PageObject {
         await this.getBodyNewIssue().setValue(description)
     }
 
+    public async submitIssue(): Promise<void> {
+        await this.getSubmitIssue().isClickable()
+        await this.getSubmitIssue().click()
+    }
+
     private getButtonNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//*[@id="repo-content-turbo-frame"]/div/div/child::div[2]')
+        return this.browser.$('//a[contains(@href, "/issues/new")]')
     }
 
     private getTitleNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
@@ -42,22 +48,22 @@ class IssuePage extends PageObject {
     }
 
     private getBodyNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('id="issue_body"')
+        return this.browser.$('//*[@id="issue_body"]')
     }
 
     private getSubmitIssue(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//button[contains(text(), "submit")]')
+        return this.browser.$('//button[contains(text(), "Submit new issue")]')
     }
 
     private getTitleIssue(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//*[@id="issue_1_link"]')
+        return this.browser.$('//bdi')
     }
 
     public async createIssue(issue: IssueModel): Promise<void> {
         await this.createNewIssue()
         await this.setTitleIssue(issue.title)
         await this.setDescriptionIssue(issue.description)
-        await this.getSubmitIssue().click()
+        await this.submitIssue()
 
     }
 

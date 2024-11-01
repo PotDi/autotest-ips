@@ -1,15 +1,12 @@
 import { ChainablePromiseElement } from 'webdriverio'
 import { PageObject } from '../../page-objects/PageObject'
+import { UserModel } from '../model/user.model'
 
 class LoginPage extends PageObject {
     protected url: string = 'https://github.com/login'
 
     constructor(browser: WebdriverIO.Browser) {
         super(browser)
-    }
-
-    private getLoginForm(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//*[@id="login"]')
     }
 
     private getLoginField(): ChainablePromiseElement<WebdriverIO.Element> {
@@ -46,10 +43,10 @@ class LoginPage extends PageObject {
             timeoutMsg: 'Login button was not clickable'
         })
     }
-    public async login(auth: { login: string, password: string }): Promise<void> {
+    public async login(user: UserModel): Promise<void> {
         await this.waitForDisplayedLoginForm()
-        await this.setLogin(auth.login)
-        await this.setPassword(auth.password)
+        await this.setLogin(user.login)
+        await this.setPassword(user.password)
         await this.submit()
     }
 }

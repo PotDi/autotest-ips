@@ -1,9 +1,11 @@
 import { LoginPage } from "../page-objects/Login.page"
 import { MainPage } from "../page-objects/Main.page"
-import { auth } from '../../secrets/credential'
+import { createUserModel, UserModel } from "../model/user.model"
+import { userData } from "../data/user.data"
 
 describe('Login Form', () => {
     let loginPage: LoginPage
+    const user: UserModel = createUserModel(userData)
 
     before(async () => {
         await loginPage.open()
@@ -11,12 +13,12 @@ describe('Login Form', () => {
 
     it('login validate data', async () => {
         const loginPage: LoginPage = new LoginPage(browser)
-        await loginPage.login(auth)
+        await loginPage.login(user)
 
         const mainPage: MainPage = new MainPage(browser)
         const isDisplayedElement: boolean = await mainPage.isDisplayedUserLogin()
 
-        expect(isDisplayedElement)
+        expect(isDisplayedElement).toEqual(true)
     })
 
 
@@ -27,12 +29,12 @@ describe('Login Form', () => {
         await browser.$('//*[@id="login_field"]').waitForDisplayed({
             timeoutMsg: 'login input was not displayed',
         })
-        await browser.$('//*[@id="login_field"]').setValue(auth.email)
+        await browser.$('//*[@id="login_field"]').setValue(user.email)
 
         await browser.$('//*[@id="password"]').waitForDisplayed({
             timeoutMsg: 'Password input was not displayed',
         })
-        await browser.$('//*[@id="password"]').setValue(auth.password)
+        await browser.$('//*[@id="password"]').setValue(user.password)
 
         await browser.$('//*[@type="submit"]').waitForClickable({
             timeoutMsg: 'Login button was not clickable'

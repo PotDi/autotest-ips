@@ -14,6 +14,8 @@ class UploadFile {
         await showHiddenFileInput(this.browser)
         const file: string = await this.browser.uploadFile(filePath)
         await this.getInputFile().setValue(file)
+        await this.getInputFile().getAttribute('src') //найти способо проверить аватар или сравнить с 
+        //уведомлением об успешном сохранении аватарки
     }
 
     private getInputFile(): ChainablePromiseElement<WebdriverIO.Element> {

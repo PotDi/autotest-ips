@@ -8,7 +8,7 @@ describe('Create Issue', () => {
     let loginPage: LoginPage
     let issuePage: IssuePage
     const user: UserModel = createUserModel(userData)
-    const issue: IssueModel = createIssueModel({ title: 'Новая задача' })
+    const issue: IssueModel = createIssueModel({ description: '' })
 
     before(async () => {
         loginPage = new LoginPage(browser)
@@ -17,10 +17,6 @@ describe('Create Issue', () => {
         await loginPage.login(user)
         await issuePage.open()
     })
-
-    // beforeEach(async () => {
-
-    // })
 
     it('Validate with title and description', async () => {
         await issuePage.createIssue(issue)

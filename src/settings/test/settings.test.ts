@@ -15,6 +15,7 @@ describe('Settings', () => {
         loginPage = new LoginPage(browser)
         profilePage = new ProfilePage(browser) //перенести сюда login (поправил)
         personalPage = new PersonalPage(browser)
+        uploadFile = new UploadFile(browser)
         await loginPage.open()
         await loginPage.login(auth)
     })
@@ -53,7 +54,7 @@ describe('Settings', () => {
     })
 
 
-    it('Vaildate select pronous', async () => {
+    it('Vaildate select pronous', async () => { //перефразировать название
         await profilePage.setProfilePronouns()
         await profilePage.submit()
 
@@ -62,7 +63,7 @@ describe('Settings', () => {
         expect(getTextPronouns).toHaveText('he/him')
     })
 
-    it('Validate select email', async () => {
+    it('Validate select email', async () => { //перефразировать название
         await profilePage.setEmail()
         await profilePage.submit()
 
@@ -71,7 +72,7 @@ describe('Settings', () => {
         expect(getTextPronouns).toHaveText('dimanit125@gmail.com')
     })
 
-    it('Upload file', async () => {
+    it.only('Upload file', async () => {
         await uploadFile.uploadFile(IMAGE_PATH)
         await profilePage.submit()
 

@@ -10,15 +10,21 @@ class IssuePage extends PageObject {
     }
 
     public async getTextTitleIssue(): Promise<string> {
-        await this.getTitleIssue().isDisplayed()
+        await this.getTitleIssue().waitForDisplayed({
+            timeoutMsg: 'Text title was not displayed'
+        }) //waitForDisplayed
         return this.getTitleIssue().getText()
     }
+
     public async getTextDerscriptionIssue(): Promise<string> {
-        await this.getDescriptionIssue().isDisplayed()
+        await this.getDescriptionIssue().waitForDisplayed({
+            timeoutMsg: 'Text title was not displayed'
+        }) //waitForDisplayed
         return await this.getDescriptionIssue().getText()
     }
+
     public async createNewIssue(): Promise<void> {
-        await this.getButtonNewIssue().waitForDisplayed({
+        await this.getButtonNewIssue().waitForClickable({ //clickable
             timeoutMsg: 'Button new issue was not displayed'
         })
         await this.getButtonNewIssue().click()
@@ -39,8 +45,17 @@ class IssuePage extends PageObject {
     }
 
     public async submitIssue(): Promise<void> {
-        await this.getSubmitIssue().isClickable()
+        await this.getSubmitIssue().waitForClickable({
+            timeoutMsg: 'Button submit was not displayed'
+        }) //waitforClickable
         await this.getSubmitIssue().click()
+    }
+
+    public async createIssue(issue: IssueModel): Promise<void> {
+        await this.createNewIssue()
+        await this.setTitleIssue(issue.title)
+        await this.setDescriptionIssue(issue.description)
+        await this.submitIssue()
     }
 
     private getButtonNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
@@ -51,7 +66,7 @@ class IssuePage extends PageObject {
         return this.browser.$('//*[@id="issue_title"]')
     }
 
-    private getBodyNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getBodyNewIssue(): ChainablePromiseElement<WebdriverIO.Element> { //переименовать getDescptionField
         return this.browser.$('//*[@id="issue_body"]')
     }
 
@@ -65,14 +80,6 @@ class IssuePage extends PageObject {
 
     private getDescriptionIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//p[@dir="auto"]')
-    }
-
-    public async createIssue(issue: IssueModel): Promise<void> {
-        await this.createNewIssue()
-        await this.setTitleIssue(issue.title)
-        await this.setDescriptionIssue(issue.description)
-        await this.submitIssue()
-
     }
 
 }

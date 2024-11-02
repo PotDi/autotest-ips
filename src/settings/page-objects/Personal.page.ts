@@ -19,7 +19,7 @@ class PersonalPage extends PageObject {
     }
 
     public async getTextPronouns(): Promise<string> {
-        await this.getPronouns().isDisplayed() //дождаться текста
+        await this.getPronouns().isDisplayed() //waitForDisplayed
         return this.getPronouns().getText()
     }
 

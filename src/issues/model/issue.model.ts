@@ -3,7 +3,7 @@ type IssueModel = {
     description: string,
 }
 
-function getRandomString(len: number): string {
+function getRandomString(len: number): string { //вынести в отдельный файл
     var num = ' '
     while (num.length < len)
         num += Math.random()

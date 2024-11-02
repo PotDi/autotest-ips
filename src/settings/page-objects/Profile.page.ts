@@ -2,9 +2,6 @@ import { ChainablePromiseElement } from 'webdriverio'
 import { PageObject } from '../../page-objects/PageObject'
 //убрать неиспользуемый импорт (поправил)
 class ProfilePage extends PageObject {
-    iSDisplayedName(): boolean | PromiseLike<boolean> {
-        throw new Error("Method not implemented.")
-    }
     protected url: string = 'https://github.com/settings/profile'
 
     constructor(browser: WebdriverIO.Browser) {
@@ -66,6 +63,7 @@ class ProfilePage extends PageObject {
     }
 
     //оставить переносы строк между методами. Разобраться что делает функция? (поправлено)
+    // переиспользовать этот метод при очистке
     public async setProfilePronouns(): Promise<void> {
         await this.getProfilePronouns().waitForDisplayed({
             timeoutMsg: 'Pronous was not displayed'
@@ -80,7 +78,7 @@ class ProfilePage extends PageObject {
         await this.getProfileButtonUpdate().click()
     }
     // переименовать метод
-    public async profile(data: { name: string, summary: string, email: string }): Promise<void> {
+    public async setDataProfile(data: { name: string, summary: string, email: string }): Promise<void> {
         await this.waitForDisplayedProfileForm()
         await this.setName(data.name)
         await this.setBio(data.summary)

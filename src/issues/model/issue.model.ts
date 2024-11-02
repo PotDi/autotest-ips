@@ -1,13 +1,8 @@
+import { getRandomString } from "../../common/data/generateData"
+
 type IssueModel = {
     title: string,
     description: string,
-}
-
-function getRandomString(len: number): string { //вынести в отдельный файл
-    var num = ' '
-    while (num.length < len)
-        num += Math.random()
-    return num.toString()
 }
 
 function createIssueModel(entities?: Partial<IssueModel>): IssueModel {

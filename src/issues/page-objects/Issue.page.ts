@@ -12,42 +12,42 @@ class IssuePage extends PageObject {
     public async getTextTitleIssue(): Promise<string> {
         await this.getTitleIssue().waitForDisplayed({
             timeoutMsg: 'Text title was not displayed'
-        }) //waitForDisplayed
+        }) //waitForDisplayed(поправлено)
         return this.getTitleIssue().getText()
     }
 
     public async getTextDerscriptionIssue(): Promise<string> {
         await this.getDescriptionIssue().waitForDisplayed({
             timeoutMsg: 'Text title was not displayed'
-        }) //waitForDisplayed
+        }) //waitForDisplayed (поправлено)
         return await this.getDescriptionIssue().getText()
     }
 
     public async createNewIssue(): Promise<void> {
-        await this.getButtonNewIssue().waitForClickable({ //clickable
+        await this.getButtonNewIssue().waitForClickable({ //clickable (поправлено)
             timeoutMsg: 'Button new issue was not displayed'
         })
         await this.getButtonNewIssue().click()
     }
 
     public async setTitleIssue(title: string): Promise<void> {
-        await this.getTitleNewIssue().waitForDisplayed({
+        await this.getTitleField().waitForDisplayed({
             timeoutMsg: 'Input title Issue was not displayed'
         })
-        await this.getTitleNewIssue().setValue(title)
+        await this.getTitleField().setValue(title)
     }
 
     public async setDescriptionIssue(description: string): Promise<void> {
-        await this.getBodyNewIssue().waitForDisplayed({
+        await this.getDescriptionField().waitForDisplayed({
             timeoutMsg: 'Input description Issue was not displayed'
         })
-        await this.getBodyNewIssue().setValue(description)
+        await this.getDescriptionField().setValue(description)
     }
 
     public async submitIssue(): Promise<void> {
         await this.getSubmitIssue().waitForClickable({
             timeoutMsg: 'Button submit was not displayed'
-        }) //waitforClickable
+        }) //waitforClickable (поправлено)
         await this.getSubmitIssue().click()
     }
 
@@ -62,11 +62,11 @@ class IssuePage extends PageObject {
         return this.browser.$('//a[contains(@href, "/issues/new")]')
     }
 
-    private getTitleNewIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+    private getTitleField(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="issue_title"]')
     }
 
-    private getBodyNewIssue(): ChainablePromiseElement<WebdriverIO.Element> { //переименовать getDescptionField
+    private getDescriptionField(): ChainablePromiseElement<WebdriverIO.Element> { //переименовать getDescptionField
         return this.browser.$('//*[@id="issue_body"]')
     }
 

@@ -9,7 +9,9 @@ class PersonalPage extends PageObject {
     }
 
     public async getTextName(): Promise<string> {
-        await this.getName().isDisplayed()
+        await this.getName().waitForDisplayed({
+            timeoutMsg: ''
+        })
         return this.getName().getText()
     }
 
@@ -28,8 +30,9 @@ class PersonalPage extends PageObject {
         return this.getEmail().getText()
     }
 
-    public SaveAvatar(): Promise<Buffer> {
-        return this.getAvatar().saveScreenshot('../common/')
+    public async getTextAlertUpdatePicture(): Promise<string> {
+        await this.getAlertUpdatePicture().waitForDisplayed()
+        return await this.getAlertUpdatePicture().getText()
     }
 
     public isDisplayedName(): Promise<boolean> {
@@ -51,8 +54,13 @@ class PersonalPage extends PageObject {
     private getEmail(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@itemprop="email"]')
     }
+
     private getAvatar(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('[//*[@id="upload-avatar-link"]')
+    }
+
+    private getAlertUpdatePicture(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('[@role="alert"]')
     }
 
 }

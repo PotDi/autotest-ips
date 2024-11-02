@@ -18,7 +18,7 @@ describe('Create Issue', () => {
         await issuePage.open()
     })
 
-    it('Validate with title and description', async () => {
+    it('Checking task creation with title and description', async () => {
         await issuePage.createIssue(issue)
 
         const getTextTitleIssue: string = await issuePage.getTextTitleIssue()

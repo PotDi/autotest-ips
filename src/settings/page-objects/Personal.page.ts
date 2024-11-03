@@ -30,11 +30,6 @@ class PersonalPage extends PageObject {
         return this.getEmail().getText()
     }
 
-    public async getTextAlertUpdatePicture(): Promise<string> {
-        await this.getAlertUpdatePicture().waitForDisplayed()
-        return await this.getAlertUpdatePicture().getText()
-    }
-
     public isDisplayedName(): Promise<boolean> {
         return this.getName().isDisplayed()
     }
@@ -53,14 +48,6 @@ class PersonalPage extends PageObject {
 
     private getEmail(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@itemprop="email"]')
-    }
-
-    private getAvatar(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('[//*[@id="upload-avatar-link"]')
-    }
-
-    private getAlertUpdatePicture(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('[@role="alert"]')
     }
 
 }

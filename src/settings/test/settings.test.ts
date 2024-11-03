@@ -4,6 +4,7 @@ import { ProfilePage } from "../page-objects/Profile.page"
 import { UploadFile } from "../page-objects/UploadFile"
 import { auth, data } from '../../secrets/credential'
 import { IMAGE_PATH } from "../../common/data/image.data"
+import { EmailType, PronounsType } from "../types/types"
 
 describe('Settings', () => {
     let loginPage: LoginPage
@@ -22,6 +23,7 @@ describe('Settings', () => {
 
     beforeEach(async () => {
         await profilePage.open()
+        await profilePage.clearInputs()
     })
 
     it('Validate input name', async () => {
@@ -53,28 +55,27 @@ describe('Settings', () => {
 
 
     it('Selecting a pronous from the list', async () => { //перефразировать название (поправлено)
-        await profilePage.setProfilePronouns()
+        await profilePage.setProfilePronouns(PronounsType.he)
         await profilePage.submit()
 
         await personalPage.open()
         const getTextPronouns: string = await personalPage.getTextPronouns()
-        expect(getTextPronouns).toHaveText('he/him')
+        expect(getTextPronouns).toHaveText(PronounsType.he)
     })
 
     it('Selecting a email from the list', async () => { //перефразировать название (поправлено)
-        await profilePage.setEmail()
+        await profilePage.setEmail(EmailType.mainEmail)
         await profilePage.submit()
 
         await personalPage.open()
         const getTextPronouns: string = await personalPage.getTextEmail()
-        expect(getTextPronouns).toHaveText('dimanit125@gmail.com')
+        expect(getTextPronouns).toHaveText(EmailType.mainEmail)
     })
 
     it.only('Checking file upload', async () => {
         await uploadFile.uploadFile(IMAGE_PATH)
         await profilePage.submit()
-        await personalPage.open()
-        const TextAlertUpdatePicture: string = await personalPage.getTextAlertUpdatePicture()
+        const TextAlertUpdatePicture: string = await profilePage.getTextAlertUpdatePicture()
         expect(TextAlertUpdatePicture).toHaveText('Your profile picture has been updated')
 
     })

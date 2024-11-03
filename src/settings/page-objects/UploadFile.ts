@@ -19,7 +19,7 @@ class UploadFile {
     }
 
     private getInputFile(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//*[@role="button"]/img')
+        return this.browser.$('[type="file"]')
     }
 }
 

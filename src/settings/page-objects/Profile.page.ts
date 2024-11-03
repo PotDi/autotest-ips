@@ -1,5 +1,6 @@
 import { ChainablePromiseElement } from 'webdriverio'
 import { PageObject } from '../../page-objects/PageObject'
+import { EmailType, PronounsType } from '../types/types'
 //убрать неиспользуемый импорт (поправил)
 class ProfilePage extends PageObject {
     protected url: string = 'https://github.com/settings/profile'
@@ -21,20 +22,6 @@ class ProfilePage extends PageObject {
         })
         await this.getProfileBio().clearValue()
     }
-    // использовать универсальный метод. Убрать метод Передавать enum
-    public async clearPronouns(): Promise<void> {
-        await this.getProfilePronouns().waitForDisplayed({
-            timeoutMsg: 'Pronous was not displayed'
-        })
-        await this.getProfilePronouns().selectByAttribute('value', 'they/them')
-    }
-
-    public async clearEmail(): Promise<void> {
-        await this.getProfileEmail().waitForDisplayed({
-            timeoutMsg: 'Email was not displayed'
-        })
-        await this.getProfileEmail().selectByAttribute('value', 'Select a verified email to display')
-    }
 
     //название метода с маленькой буквы и изменить метод на isDiplayed (поправлено)
     public async waitForDisplayedProfileForm(): Promise<void> {
@@ -54,21 +41,20 @@ class ProfilePage extends PageObject {
         })
         await this.getProfileBio().setValue(summary)
     }
-    //использовать универсальный метод email: string
-    public async setEmail(): Promise<void> {
+
+    public async setEmail(email: EmailType): Promise<void> {
         await this.getProfileEmail().waitForDisplayed({
             timeoutMsg: 'Input email was not displayed'
         })
-        await this.getProfileEmail().selectByAttribute('value', 'dimanit125@gmail.com')
+        await this.getProfileEmail().selectByAttribute('value', email)
     }
 
-    //оставить переносы строк между методами. Разобраться что делает функция? (поправлено)
-    // переиспользовать этот метод при очистке
-    public async setProfilePronouns(): Promise<void> {
+    // переиспользовать этот метод при очистке(сделано)
+    public async setProfilePronouns(pronouns: PronounsType): Promise<void> {
         await this.getProfilePronouns().waitForDisplayed({
             timeoutMsg: 'Pronous was not displayed'
         })
-        await this.getProfilePronouns().selectByAttribute('value', 'he/him')
+        await this.getProfilePronouns().selectByAttribute('value', pronouns)
     }
 
     public async submit(): Promise<void> {
@@ -77,19 +63,27 @@ class ProfilePage extends PageObject {
         })
         await this.getProfileButtonUpdate().click()
     }
-    // переименовать метод
-    public async setDataProfile(data: { name: string, summary: string, email: string }): Promise<void> {
+
+    public async getTextAlertUpdatePicture(): Promise<string> {
+        await this.getAlertUpdatePicture().waitForDisplayed()
+        return await this.getAlertUpdatePicture().getText()
+    }
+
+    // переименовать метод(поправлено)
+    public async setProfileValues(data: { name: string, summary: string, email: string }): Promise<void> {
         await this.waitForDisplayedProfileForm()
         await this.setName(data.name)
         await this.setBio(data.summary)
-        await this.setEmail()
+        await this.setProfilePronouns(PronounsType.he)
+        await this.setEmail(EmailType.mainEmail)
         await this.submit()
     }
 
     public async clearInputs(): Promise<void> {
         await this.clearInputName()
         await this.clearInputBio()
-        await this.clearPronouns()
+        await this.setProfilePronouns(PronounsType.default)
+        await this.setEmail(EmailType.default)
         await this.submit()
     }
 
@@ -111,6 +105,10 @@ class ProfilePage extends PageObject {
 
     private getProfileButtonUpdate(): ChainablePromiseElement<WebdriverIO.Element> {
         return browser.$('//*[contains(span, "Update profile")]/span/*')
+    }
+
+    private getAlertUpdatePicture(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[@role="alert"]')
     }
 
 }

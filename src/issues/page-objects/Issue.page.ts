@@ -3,7 +3,7 @@ import { ChainablePromiseElement } from 'webdriverio'
 import { IssueModel } from "../model/issue.model"
 
 class IssuePage extends PageObject {
-    protected url: string = 'https://github.com/PotDi/autotest-ips/issues/new'
+    protected url: string = 'https://github.com/PotDi/autotest-ips/issues/8'
 
     constructor(browser: WebdriverIO.Browser) {
         super(browser)
@@ -30,14 +30,14 @@ class IssuePage extends PageObject {
         await this.getCommentField().setValue(comment)
     }
 
-    public async addComent(): Promise<void> {
+    public async setButtonAddComment(): Promise<void> {
         await this.getButtonSubmitComment().waitForClickable({
             timeoutMsg: 'Button Add Comment was not clickable'
         })
         await this.getButtonSubmitComment().click()
     }
 
-    public async isDisplayedAddNewComment(): Promise<string> {
+    public async getTextAddedNewComment(): Promise<string> {
         await this.getAddNewComment().waitForDisplayed({
             timeoutMsg: 'Added new comment was not displayed'
         })
@@ -61,6 +61,11 @@ class IssuePage extends PageObject {
     public async editIssue(issue: IssueModel): Promise<void> {
         await this.setEditTitle(issue.title)
         await this.setButtonSave()
+    }
+
+    public async addCommentToIssue(issue: IssueModel): Promise<void> {
+        await this.setComment(issue.comment)
+        await this.setButtonAddComment()
     }
 
     private getInputEdit(): ChainablePromiseElement<WebdriverIO.Element> {
@@ -89,6 +94,10 @@ class IssuePage extends PageObject {
 
     private getButtonSubmitComment(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//button[contains(text(), "Comment")]')
+    }
+
+    private getButtonCloseIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('[name="comment_and_close"]')
     }
 }
 

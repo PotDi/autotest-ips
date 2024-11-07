@@ -1,7 +1,7 @@
 import { userData } from "../../users/data/user.data"
 import { createUserModel, UserModel } from "../../users/model/user.model"
 import { LoginPage } from "../../users/page-objects/Login.page"
-import { createIssueModel, IssueModel } from "../model/issue.model"
+import { issueModel, IssueModel } from "../model/issue.model"
 import { CreateIssuePage } from "../page-objects/CreateIssue.page"
 import { IssuePage } from "../page-objects/Issue.page"
 
@@ -10,7 +10,7 @@ describe('Create Issue', () => {
     let createIssuePage: CreateIssuePage
     let issuePage: IssuePage
     const user: UserModel = createUserModel(userData)
-    const issue: IssueModel = createIssueModel()
+    const issue: IssueModel = issueModel()
 
     before(async () => {
         loginPage = new LoginPage(browser)
@@ -31,19 +31,11 @@ describe('Create Issue', () => {
     })
 
     it('Checking issue create with empty title', async () => {
-        const issue: IssueModel = createIssueModel({ title: `` })
+        const issue: IssueModel = issueModel({ title: `` })
         await createIssuePage.createNewIssue()
         await createIssuePage.setTitleIssue(issue.title)
 
         expect(createIssuePage.submitIssue).toBeDisabled()
-    })
-
-    it('Check edit issue', async () => {
-        await issuePage.open()
-        await issuePage.editIssue(issue)
-
-        const getTextEditedTitleIssue: string = await issuePage.getTextTitleIssue()
-        expect(getTextEditedTitleIssue).toHaveText(issue.title)
     })
 
 })

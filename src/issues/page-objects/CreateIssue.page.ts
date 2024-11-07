@@ -3,9 +3,6 @@ import { ChainablePromiseElement } from 'webdriverio';
 import { IssueModel } from "../model/issue.model";
 
 class CreateIssuePage extends PageObject {
-    editIssue(issue: IssueModel) {
-        throw new Error("Method not implemented.");
-    }
     protected url: string = 'https://github.com/PotDi/autotest-ips/issues/new'
 
     constructor(browser: WebdriverIO.Browser) {

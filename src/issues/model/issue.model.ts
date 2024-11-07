@@ -6,7 +6,7 @@ type IssueModel = {
     comment: string,
 }
 
-function createIssueModel(entities?: Partial<IssueModel>): IssueModel {
+function issueModel(entities?: Partial<IssueModel>): IssueModel {
     return {
         title: entities?.title ?? getRandomString(6),
         description: entities?.description ?? getRandomString(7),
@@ -16,5 +16,5 @@ function createIssueModel(entities?: Partial<IssueModel>): IssueModel {
 
 export {
     IssueModel,
-    createIssueModel,
+    issueModel,
 }

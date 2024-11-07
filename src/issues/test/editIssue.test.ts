@@ -34,4 +34,11 @@ describe('Edit Issue', () => {
         const getTextAddedNewComment: string = await issuePage.getTextAddedNewComment()
         expect(getTextAddedNewComment).toHaveText(issue.comment)
     })
+
+    it('Check issue closure', async () => {
+        await issuePage.getTextNotificationCloseIssue()
+
+        const getTextNotificationCloseIssue: string = await issuePage.getTextNotificationCloseIssue()
+        expect(getTextNotificationCloseIssue).toBeDisplayed()
+    })
 })

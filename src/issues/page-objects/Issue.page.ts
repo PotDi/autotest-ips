@@ -15,6 +15,13 @@ class IssuePage extends PageObject {
         await this.getInputEdit().setValue(title)
     }
 
+    public async setButtonEditTitle(): Promise<void> {
+        await this.getButtonEditTitle().waitForDisplayed({
+            timeoutMsg: 'Button for edit title issue was not displayed'
+        })
+        await this.getButtonEditTitle().click()
+    }
+
     public async setButtonSave(): Promise<void> {
         await this.getButtonSave().waitForClickable({
             timeoutMsg: 'Button Save issue was not displayed'
@@ -58,7 +65,15 @@ class IssuePage extends PageObject {
         return await this.getDescriptionIssue().getText()
     }
 
+    public async getTextNotificationCloseIssue(): Promise<string> {
+        await this.getNotificationCloseIssue().waitForDisplayed({
+            timeoutMsg: 'Text Notitification about closed issue was not displayed'
+        })
+        return await this.getNotificationCloseIssue().getText()
+    }
+
     public async editIssue(issue: IssueModel): Promise<void> {
+        await this.setButtonEditTitle()
         await this.setEditTitle(issue.title)
         await this.setButtonSave()
     }
@@ -70,6 +85,10 @@ class IssuePage extends PageObject {
 
     private getInputEdit(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[1][@name="issue[title]"]')
+    }
+
+    private getButtonEditTitle(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[1][contains(text(), "Edit")]')
     }
 
     private getButtonSave() {
@@ -99,6 +118,11 @@ class IssuePage extends PageObject {
     private getButtonCloseIssue(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('[name="comment_and_close"]')
     }
+
+    private getNotificationCloseIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('[id="event-15189427906"]')
+    }
+
 }
 
 export {

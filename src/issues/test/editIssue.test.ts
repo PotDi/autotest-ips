@@ -36,9 +36,24 @@ describe('Edit Issue', () => {
     })
 
     it('Check issue closure', async () => {
-        await issuePage.getTextNotificationCloseIssue()
+        await issuePage.setButtonCloseIssue()
+        await issuePage.getTextNotificationIssue()
 
-        const getTextNotificationCloseIssue: string = await issuePage.getTextNotificationCloseIssue()
-        expect(getTextNotificationCloseIssue).toBeDisplayed()
+        const getTextNotificationCloseIssue: string = await issuePage.getTextNotificationIssue()
+        expect(getTextNotificationCloseIssue).toHaveText('completed')
+    })
+
+    it('Check issue reopened', async () => {
+        await issuePage.setButtonReopenedIssue()
+
+        const getTextNotificationReopenedIssue: string = await issuePage.getTextNotificationIssue()
+        expect(getTextNotificationReopenedIssue).toHaveText('reopened')
+    })
+
+    it('Check deleted issue', async () => {
+        await issuePage.deleteIssue()
+
+        const getTextNotificationDeleteIssue: string = await issuePage.getTextNotificationDeleteIssue()
+        expect(getTextNotificationDeleteIssue).toHaveText('deleted')
     })
 })

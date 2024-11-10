@@ -1,13 +1,15 @@
 import { PageObject } from "../../page-objects/PageObject"
 import { ChainablePromiseElement } from 'webdriverio'
 import { IssueModel } from "../model/issue.model"
+import { ReasonType } from "../types/types"
 
 class IssuePage extends PageObject {
-    protected url: string = 'https://github.com/PotDi/autotest-ips/issues/8'
+    protected url: string = 'https://github.com/PotDi/autotest-ips/issues/'
 
     constructor(browser: WebdriverIO.Browser) {
         super(browser)
     }
+
     public async setEditTitle(title: string): Promise<void> {
         await this.getInputEdit().waitForDisplayed({
             timeoutMsg: 'Input title was not displayed'
@@ -78,17 +80,24 @@ class IssuePage extends PageObject {
         return this.getAddNewComment().getText()
     }
 
+    public async setButtonLockComment(): Promise<void> {
+        await this.getButtonLockComment().waitForClickable({
+            timeoutMsg: 'Button lock comment was not clickable'
+        })
+        await this.getButtonLockComment().click()
+    }
+
     public async getTextTitleIssue(): Promise<string> {
         await this.getTitleIssue().waitForDisplayed({
             timeoutMsg: 'Text title was not displayed'
-        }) //waitForDisplayed(поправлено)
+        })
         return this.getTitleIssue().getText()
     }
 
     public async getTextDerscriptionIssue(): Promise<string> {
         await this.getDescriptionIssue().waitForDisplayed({
             timeoutMsg: 'Text title was not displayed'
-        }) //waitForDisplayed (поправлено)
+        })
         return await this.getDescriptionIssue().getText()
     }
 
@@ -99,8 +108,37 @@ class IssuePage extends PageObject {
         return await this.getNotificationCloseIssue().getText()
     }
 
+    public async getTextNotificationLockComment(): Promise<string> {
+        await this.getNotificationLockComment().waitForDisplayed({
+            timeoutMsg: 'Text notification about lock comment was not displayed'
+        })
+        return this.getNotificationLockComment().getText()
+    }
+
+    public async isDisplayedLabelIssue(): Promise<boolean> {
+        return this.getLabelIssue().isDisplayed()
+    }
+
+    public async isDisplayedAttachComment(): Promise<boolean> {
+        return this.getAttachComment().isDisplayed()
+    }
+
+    public async setPopupButtonLockComment(): Promise<void> {
+        await this.getButtonLockCommentPopup().waitForClickable({
+            timeoutMsg: 'Button lock comment in popup was not clickable'
+        })
+        await this.getButtonLockCommentPopup().click()
+    }
+
+    public async setPopupReasonList(reason: ReasonType): Promise<void> {
+        await this.getPopupReasonList().waitForClickable({
+            timeoutMsg: 'List with reasons was not clickable'
+        })
+        await this.getPopupReasonList().selectByAttribute('value', reason)
+    }
+
     public async getTextNotificationDeleteIssue(): Promise<string> {
-        (await this.getNotificationDeleteIssue()).waitForDisplayed({
+        await this.getNotificationDeleteIssue().waitForDisplayed({
             timeoutMsg: 'Text Notification deleted issue was not displayed'
         })
         return await this.getNotificationDeleteIssue().getText()
@@ -130,7 +168,7 @@ class IssuePage extends PageObject {
         return this.browser.$('//*[1][contains(text(), "Edit")]')
     }
 
-    private getButtonSave() {
+    private getButtonSave(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@data-disable-with="Updating"]')
     }
 
@@ -178,6 +216,29 @@ class IssuePage extends PageObject {
         return this.browser.$('[role="alert"]')
     }
 
+    private getAttachComment(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//p[@dir="auto"]/animated-image')
+    }
+
+    private getLabelIssue(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('(//*[contains(@id, "label")])[last()]')
+    }
+
+    private getButtonLockComment(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//summary[@role="button"]/strong')
+    }
+
+    private getPopupReasonList(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('[id="unlock-reason"]')
+    }
+
+    private getButtonLockCommentPopup(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('(//*[contains(text(),"Lock")])[last()]')
+    }
+
+    private getNotificationLockComment(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('[class="TimelineItem-body"]')
+    }
 }
 
 export {

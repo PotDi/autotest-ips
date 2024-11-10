@@ -1,7 +1,7 @@
 import { userData } from "../../users/data/user.data"
 import { createUserModel, UserModel } from "../../users/model/user.model"
 import { LoginPage } from "../../users/page-objects/Login.page"
-import { issueModel, IssueModel } from "../model/issue.model"
+import { createIssueModel, IssueModel } from "../model/issue.model"
 import { CreateIssuePage } from "../page-objects/CreateIssue.page"
 import { IssuePage } from "../page-objects/Issue.page"
 
@@ -10,7 +10,7 @@ describe('Create Issue', () => {
     let createIssuePage: CreateIssuePage
     let issuePage: IssuePage
     const user: UserModel = createUserModel(userData)
-    const issue: IssueModel = issueModel()
+    const issue: IssueModel = createIssueModel()
 
     before(async () => {
         loginPage = new LoginPage(browser)
@@ -18,10 +18,13 @@ describe('Create Issue', () => {
         issuePage = new IssuePage(browser)
         await loginPage.open()
         await loginPage.login(user)
+    })
+
+    beforeEach(async () => {
         await createIssuePage.open()
     })
 
-    it('Checking issue create with title and description', async () => {
+    it('Issue was created with title and description', async () => {
         await createIssuePage.createIssue(issue)
 
         const getTextTitleIssue: string = await issuePage.getTextTitleIssue()
@@ -30,12 +33,26 @@ describe('Create Issue', () => {
         expect(getTextDerscriptionIssue).toHaveText(issue.description)
     })
 
-    it('Checking issue create with empty title', async () => {
-        const issue: IssueModel = issueModel({ title: `` })
-        await createIssuePage.createNewIssue()
+    it("Can't create issue with an empty title", async () => { //Название тест Нельзя создать задачу с пустым заголовком
+        const issue: IssueModel = createIssueModel({ title: `` })
+        await createIssuePage.setButtonCreateIssue()
         await createIssuePage.setTitleIssue(issue.title)
 
         expect(createIssuePage.submitIssue).toBeDisabled()
+    })
+
+    it('Issue should be create with labels', async () => {
+        await createIssuePage.createIssueWithLabels(issue)
+
+        const isDisplayedLabelIssue: boolean = await issuePage.isDisplayedLabelIssue()
+        expect(isDisplayedLabelIssue).toEqual(true)
+    })
+
+    it.only('Issue should be create with attach ', async () => {
+        await createIssuePage.createIssueWithAttach(issue)
+
+        const isDisplayedAttachComment: boolean = await issuePage.isDisplayedAttachComment()
+        expect(isDisplayedAttachComment).toEqual(true)
     })
 
 })

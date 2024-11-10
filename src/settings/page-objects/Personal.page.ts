@@ -10,23 +10,29 @@ class PersonalPage extends PageObject {
 
     public async getTextName(): Promise<string> {
         await this.getName().waitForDisplayed({
-            timeoutMsg: ''
+            timeoutMsg: 'Text name was not displayed'
         })
         return this.getName().getText()
     }
 
     public async getTextBio(): Promise<string> {
-        await this.getBio().isDisplayed()
+        await this.getBio().waitForDisplayed({
+            timeoutMsg: 'Text Bio was not displayed'
+        })
         return this.getBio().getText()
     }
 
     public async getTextPronouns(): Promise<string> {
-        await this.getPronouns().isDisplayed() //waitForDisplayed
+        await this.getPronouns().waitForDisplayed({
+            timeoutMsg: 'Text pronouns was not displayed'
+        })
         return this.getPronouns().getText()
     }
 
     public async getTextEmail(): Promise<string> {
-        await this.getEmail().isDisplayed()
+        await this.getEmail().waitForDisplayed({
+            timeoutMsg: 'Text pronouns was not displayed'
+        })
         return this.getEmail().getText()
     }
 

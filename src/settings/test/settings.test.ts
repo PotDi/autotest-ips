@@ -36,7 +36,6 @@ describe('Settings', () => {
     })
 
     it('Validate input empty name', async () => {
-        await profilePage.clearInputName()
         await profilePage.submit()
 
         await personalPage.open()
@@ -54,7 +53,7 @@ describe('Settings', () => {
     })
 
 
-    it('Selecting a pronous from the list', async () => { //перефразировать название (поправлено)
+    it('Pronouns should be selected', async () => {
         await profilePage.setProfilePronouns(PronounsType.he)
         await profilePage.submit()
 
@@ -63,7 +62,7 @@ describe('Settings', () => {
         expect(getTextPronouns).toHaveText(PronounsType.he)
     })
 
-    it('Selecting a email from the list', async () => { //перефразировать название (поправлено)
+    it('Email should be selected', async () => {
         await profilePage.setEmail(EmailType.mainEmail)
         await profilePage.submit()
 
@@ -72,7 +71,7 @@ describe('Settings', () => {
         expect(getTextPronouns).toHaveText(EmailType.mainEmail)
     })
 
-    it.only('Checking file upload', async () => {
+    it('File should be updated', async () => {
         await uploadFile.uploadFile(IMAGE_PATH)
         await profilePage.submit()
         const TextAlertUpdatePicture: string = await profilePage.getTextAlertUpdatePicture()

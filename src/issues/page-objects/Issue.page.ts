@@ -119,8 +119,11 @@ class IssuePage extends PageObject {
         return this.getLabelIssue().isDisplayed()
     }
 
-    public async isDisplayedAttachComment(): Promise<boolean> {
-        return this.getAttachComment().isDisplayed()
+    public async getNameAttachComment(): Promise<string> {
+        await this.getAttachComment().waitForDisplayed({
+            timeoutMsg: 'Attach was not displayed'
+        })
+        return this.getAttachComment().getText()
     }
 
     public async setPopupButtonLockComment(): Promise<void> {
@@ -217,7 +220,7 @@ class IssuePage extends PageObject {
     }
 
     private getAttachComment(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//p[@dir="auto"]/animated-image')
+        return this.browser.$('//p[@dir="auto"]/a')
     }
 
     private getLabelIssue(): ChainablePromiseElement<WebdriverIO.Element> {

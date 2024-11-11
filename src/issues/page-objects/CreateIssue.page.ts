@@ -1,5 +1,5 @@
 import { PageObject } from "../../page-objects/PageObject";
-import { ChainablePromiseElement } from 'webdriverio';
+import { ChainablePromiseArray, ChainablePromiseElement, ElementArray } from 'webdriverio';
 import { IssueModel } from "../model/issue.model";
 import { ATTACH_PATH } from "../../common/data/image.data";
 
@@ -64,9 +64,6 @@ class CreateIssuePage extends PageObject {
         await this.setButtonCreateIssue()
         await this.setTitleIssue(issue.title)
         await this.uploadAttach(ATTACH_PATH)
-        await browser.setTimeout({
-            pageLoad: 20000
-        })
         await this.submitIssue()
     }
 
@@ -89,7 +86,6 @@ class CreateIssuePage extends PageObject {
     private getLabels(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//label[@role="menuitemcheckbox"][1]')
     }
-
 }
 
 export {

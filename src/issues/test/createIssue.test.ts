@@ -1,3 +1,5 @@
+import { ATTACH_PATH } from "../../common/data/image.data"
+import path from 'path'
 import { userData } from "../../users/data/user.data"
 import { createUserModel, UserModel } from "../../users/model/user.model"
 import { LoginPage } from "../../users/page-objects/Login.page"
@@ -41,18 +43,19 @@ describe('Create Issue', () => {
         expect(createIssuePage.submitIssue).toBeDisabled()
     })
 
-    it('Issue should be create with labels', async () => {
+    it.only('Issue should be create with labels', async () => {
         await createIssuePage.createIssueWithLabels(issue)
 
         const isDisplayedLabelIssue: boolean = await issuePage.isDisplayedLabelIssue()
         expect(isDisplayedLabelIssue).toEqual(true)
     })
 
-    it.only('Issue should be create with attach ', async () => {
+    it('Issue should be create with attach ', async () => {
         await createIssuePage.createIssueWithAttach(issue)
 
-        const isDisplayedAttachComment: boolean = await issuePage.isDisplayedAttachComment()
-        expect(isDisplayedAttachComment).toEqual(true)
+        const fileName = path.basename(ATTACH_PATH)
+        const getNameAttachComment: string = await issuePage.getNameAttachComment()
+        expect(getNameAttachComment).toHaveText(fileName)
     })
 
 })

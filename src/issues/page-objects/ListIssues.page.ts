@@ -33,7 +33,6 @@ class ListIssuesPage extends PageObject {
         return this.browser.$('//*[contains(@id, "issue_")]')
     }
 
-
     private getFilterLabels(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@role="menuitemcheckbox"][2]')
     }

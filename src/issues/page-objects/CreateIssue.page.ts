@@ -25,6 +25,13 @@ class CreateIssuePage extends PageObject {
     }
 
     public async setButtonLabels(): Promise<void> {
+        await this.getButtonLabels().waitForClickable({
+            timeoutMsg: 'Button Labels was not clickable'
+        })
+        await this.getButtonLabels().click()
+    }
+
+    public async setChoiceLabels(): Promise<void> {
         await this.getLabels().waitForClickable({
             timeoutMsg: 'Button Labels was not clickable'
         })
@@ -36,6 +43,13 @@ class CreateIssuePage extends PageObject {
             timeoutMsg: 'Input description Issue was not displayed'
         })
         await this.getDescriptionField().setValue(description)
+    }
+
+    public async setBody(): Promise<void> {
+        await this.getBody().waitForDisplayed({
+            timeoutMsg: 'Page was not displayed'
+        })
+        await this.getBody().click()
     }
 
     public async submitIssue(): Promise<void> {
@@ -57,6 +71,8 @@ class CreateIssuePage extends PageObject {
         await this.setTitleIssue(issue.title)
         await this.setDescriptionIssue(issue.description)
         await this.setButtonLabels()
+        await this.setChoiceLabels()
+        await this.setBody()
         await this.submitIssue()
     }
 
@@ -80,11 +96,19 @@ class CreateIssuePage extends PageObject {
     }
 
     private getSubmitIssue(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//button[contains(text(), "Submit new issue")]')
+        return this.browser.$('//*[contains(@class, "flex")]/button[contains(text(), "Submit new issue")]')
+    }
+
+    private getButtonLabels(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[@data-cache-name="labels"]/details')
     }
 
     private getLabels(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//label[@role="menuitemcheckbox"][1]')
+        return this.browser.$('//*[@role="menuitemcheckbox"][1]')
+    }
+
+    private getBody(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//body')
     }
 }
 

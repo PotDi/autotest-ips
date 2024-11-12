@@ -20,19 +20,14 @@ describe('Create Issue', () => {
 
     before(async () => {
         listIssuesPage = new ListIssuesPage(browser)
-    })
-
-    beforeEach(async () => {
         issue = createIssueModel()
         const createIssuePage: CreateIssuePage = new CreateIssuePage(browser)
-        createIssuePage.createIssueWithLabels(issue)
         await listIssuesPage.open()
+        createIssuePage.createIssueWithLabels(issue)
+
     })
 
     it('Sorting by label should work', async () => {
-        await listIssuesPage.setFilterLabels()
-
-        await listIssuesPage.open()
         const getTextIssuesFilterLabel: string = await listIssuesPage.getTextIssuesFilterLabel()
         expect(getTextIssuesFilterLabel).toHaveText('bug')
     })

@@ -43,7 +43,7 @@ describe('Create Issue', () => {
         expect(createIssuePage.submitIssue).toBeDisabled()
     })
 
-    it.only('Issue should be create with labels', async () => {
+    it('Issue should be create with labels', async () => {
         await createIssuePage.createIssueWithLabels(issue)
 
         const isDisplayedLabelIssue: boolean = await issuePage.isDisplayedLabelIssue()

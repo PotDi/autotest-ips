@@ -1,6 +1,6 @@
 import { AxiosResponse, AxiosRequestConfig } from "axios";
 import { GitAPIProvider } from "../../common/api/GitAPIProvider";
-import { CreateTeamRequest } from "./teamAPIDataProvider";
+import { CreateTeamRequest } from "./TeamAPIDataProvider";
 
 class TeamAPIProvider extends GitAPIProvider {
     public create<T>(organization: string, data: CreateTeamRequest): Promise<AxiosResponse<T>> {

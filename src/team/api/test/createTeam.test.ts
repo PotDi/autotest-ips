@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios"
-import { CreateTeamRequest } from "../teamAPIDataProvider"
-import { TeamAPIProvider } from "../teamAPIProvider"
+import { CreateTeamRequest } from "../TeamAPIDataProvider"
+import { TeamAPIProvider } from "../TeamAPIProvider"
 import { CreateTeamResponse } from "../TeamAPIService"
 
 const ORGANIZATION_NAME = 'Test-Company2'

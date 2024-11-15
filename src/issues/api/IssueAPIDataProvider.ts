@@ -1,7 +1,7 @@
 type CreateLabelRequest = {
     name: string,
     description?: string,
-    color?: string
+    color?: string,
 }
 
 type CreateIssueRequest = {
@@ -10,7 +10,12 @@ type CreateIssueRequest = {
     labels: string[],
 }
 
+type SetLabelRequest = {
+    labels: string[],
+}
+
 export {
     CreateLabelRequest,
     CreateIssueRequest,
+    SetLabelRequest,
 }

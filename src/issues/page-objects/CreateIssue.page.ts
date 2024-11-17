@@ -2,9 +2,10 @@ import { PageObject } from "../../page-objects/PageObject";
 import { ChainablePromiseArray, ChainablePromiseElement, ElementArray } from 'webdriverio';
 import { IssueModel } from "../model/issue.model";
 import { ATTACH_PATH } from "../../common/data/image.data";
+import { LabelModel } from "../model/label.model";
 
 class CreateIssuePage extends PageObject {
-    protected url: string = 'https://github.com/PotDi/autotest-ips/issues'
+    protected url: string = 'https://github.com/PotDi/autotest-ips/issues/new'
 
     constructor(browser: WebdriverIO.Browser) {
         super(browser)
@@ -31,7 +32,7 @@ class CreateIssuePage extends PageObject {
         await this.getButtonLabels().click()
     }
 
-    public async setChoiceLabels(): Promise<void> {
+    public async setChoiceLabels(label?: LabelModel): Promise<void> {
         await this.getLabels().waitForClickable({
             timeoutMsg: 'Button Labels was not clickable'
         })
@@ -59,19 +60,12 @@ class CreateIssuePage extends PageObject {
         await this.getSubmitIssue().click()
     }
 
-    public async createIssue(issue: IssueModel): Promise<void> {
-        await this.setButtonCreateIssue()
-        await this.setTitleIssue(issue.title)
-        await this.setDescriptionIssue(issue.description)
-        await this.submitIssue()
-    }
-
     public async createIssueWithLabels(issue: IssueModel): Promise<void> {
         await this.setButtonCreateIssue()
         await this.setTitleIssue(issue.title)
         await this.setDescriptionIssue(issue.description)
         await this.setButtonLabels()
-        await this.setChoiceLabels()
+        await this.setChoiceLabels(issue.label)
         await this.setBody()
         await this.submitIssue()
     }
@@ -79,7 +73,7 @@ class CreateIssuePage extends PageObject {
     public async createIssueWithAttach(issue: IssueModel): Promise<void> {
         await this.setButtonCreateIssue()
         await this.setTitleIssue(issue.title)
-        await this.uploadAttach(ATTACH_PATH)
+        await this.uploadAttach(ATTACH_PATH) //Attach_path хранить в модели
         await this.submitIssue()
     }
 
@@ -91,7 +85,7 @@ class CreateIssuePage extends PageObject {
         return this.browser.$('[id="issue_title"]')
     }
 
-    private getDescriptionField(): ChainablePromiseElement<WebdriverIO.Element> { //переименовать в getDescptionField (поправлено)
+    private getDescriptionField(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="issue_body"]')
     }
 

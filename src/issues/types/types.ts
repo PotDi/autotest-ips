@@ -6,6 +6,13 @@ enum ReasonType {
     Spam = 'Spam',
 }
 
+enum StateType {
+    completed = 'completed',
+    reopened = 'reopened',
+    deleted = 'deleted',
+}
+
 export {
     ReasonType,
+    StateType,
 }

@@ -1,7 +1,7 @@
 type CreateLabelResponse = {
     name: string,
-    description: string | null,
-    color: string | null,
+    description: string,
+    color: string,
 }
 
 type CreateIssueResponse = {

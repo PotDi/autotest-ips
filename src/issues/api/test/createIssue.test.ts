@@ -2,7 +2,8 @@ import { AxiosResponse } from "axios"
 import { createIssueModel, IssueModel } from "../../model/issue.model"
 import { CreateIssueRequest } from "../IssueAPIDataProvider"
 import { IssueAPIProvider } from "../issueAPIProvider"
-import { CreateIssueResponse, CreateLabelResponse } from "../issueAPIService"
+import { CreateIssueResponse } from "../issueAPIService"
+import { labelData } from "../../model/label.model"
 
 const OWNER = 'PotDi'
 const REPOSITORY = 'autotest-ips'
@@ -15,7 +16,7 @@ describe('Create issue', () => {
         const data: CreateIssueRequest = {
             title: issue.title,
             body: issue.description,
-            labels: ["baguly"],
+            labels: issue.label.name //брать из модели
         }
         const issueAPIProvider = new IssueAPIProvider({
             isSuccesfulResponse: false
@@ -26,5 +27,7 @@ describe('Create issue', () => {
 
         expect(response.status).toEqual(201)
         expect(response.data.title).toEqual(data.title)
+        expect(response.data.body).toEqual(data.body)
+        expect(response.data.labels).toEqual(data.labels) //проверить label, body
     })
 })

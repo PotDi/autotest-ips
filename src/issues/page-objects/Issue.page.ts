@@ -17,23 +17,23 @@ class IssuePage extends PageObject {
         await this.getInputEdit().setValue(title)
     }
 
-    public async setButtonEditTitle(): Promise<void> {
+    public async setButtonEditTitle(): Promise<void> { //переименовать название функции 
         await this.getButtonEditTitle().waitForClickable({
-            timeoutMsg: 'Button for edit title issue was not displayed'
+            timeoutMsg: 'Button for edit title issue was not clickable'
         })
         await this.getButtonEditTitle().click()
     }
 
     public async setButtonSave(): Promise<void> {
         await this.getButtonSave().waitForClickable({
-            timeoutMsg: 'Button Save issue was not displayed'
+            timeoutMsg: 'Button Save issue was not clickable'
         })
         await this.getButtonSave().click()
     }
 
     public async setButtonCloseIssue(): Promise<void> {
         await this.getButtonCloseIssue().waitForClickable({
-            timeoutMsg: 'Button close issue was not displayed'
+            timeoutMsg: 'Button close issue was not displayed' // поправить на clickable
         })
         await this.getButtonCloseIssue().click()
     }

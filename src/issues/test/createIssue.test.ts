@@ -6,13 +6,18 @@ import { LoginPage } from "../../users/page-objects/Login.page"
 import { createIssueModel, IssueModel } from "../model/issue.model"
 import { CreateIssuePage } from "../page-objects/CreateIssue.page"
 import { IssuePage } from "../page-objects/Issue.page"
+import { ListIssuesPage } from "../page-objects/ListIssues.page"
 
 describe('Create Issue', () => {
     let loginPage: LoginPage
     let createIssuePage: CreateIssuePage
+    let listIssuesPage: ListIssuesPage
     let issuePage: IssuePage
     const user: UserModel = createUserModel(userData)
     const issue: IssueModel = createIssueModel()
+    const issueWithAttach: IssueModel = createIssueModel({
+        title: 'заголовок',
+    })
 
     before(async () => {
         loginPage = new LoginPage(browser)
@@ -27,7 +32,7 @@ describe('Create Issue', () => {
     })
 
     it('Issue was created with title and description', async () => {
-        await createIssuePage.createIssue(issue)
+        await listIssuesPage.createIssue(issue)
 
         const getTextTitleIssue: string = await issuePage.getTextTitleIssue()
         const getTextDerscriptionIssue: string = await issuePage.getTextDerscriptionIssue()
@@ -35,7 +40,7 @@ describe('Create Issue', () => {
         expect(getTextDerscriptionIssue).toHaveText(issue.description)
     })
 
-    it("Can't create issue with an empty title", async () => { //Название тест Нельзя создать задачу с пустым заголовком
+    it("Can't create issue with an empty title", async () => {
         const issue: IssueModel = createIssueModel({ title: `` })
         await createIssuePage.setButtonCreateIssue()
         await createIssuePage.setTitleIssue(issue.title)
@@ -53,9 +58,9 @@ describe('Create Issue', () => {
     it('Issue should be create with attach ', async () => {
         await createIssuePage.createIssueWithAttach(issue)
 
-        const fileName = path.basename(ATTACH_PATH)
+        const fileName = path.basename(ATTACH_PATH) //хранить в модели
         const getNameAttachComment: string = await issuePage.getNameAttachComment()
-        expect(getNameAttachComment).toHaveText(fileName)
+        expect(getNameAttachComment).toHaveText(fileName) //toEqual
     })
 
 })

@@ -9,6 +9,7 @@ function getRandomString(len: number) {
     }
     return result
 }
+
 export {
     getRandomString,
 }

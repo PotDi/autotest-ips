@@ -3,10 +3,9 @@ import { userData } from "../../users/data/user.data"
 import { createUserModel, UserModel } from "../../users/model/user.model"
 import { LoginPage } from "../../users/page-objects/Login.page"
 import { createIssueModel, IssueModel } from "../model/issue.model"
-import { CreateIssuePage } from "../page-objects/CreateIssue.page"
 import { IssuePage } from "../page-objects/Issue.page"
 import { ListIssuesPage } from "../page-objects/ListIssues.page"
-import { ReasonType } from "../types/types"
+import { ReasonType, StateType } from "../types/types"
 
 describe('Edit Issue', () => {
     let loginPage: LoginPage
@@ -28,54 +27,56 @@ describe('Edit Issue', () => {
 
     beforeEach(async () => {
         issue = createIssueModel()
-        const createIssuePage: CreateIssuePage = new CreateIssuePage(browser)
-        createIssuePage.createIssue(issue)
+        const listIssuesPage: ListIssuesPage = new ListIssuesPage(browser) //listIssues
+        listIssuesPage.createIssue(issue) //перенести createIssue в ListIssuePage 
+        await browser.pause(5000)
         await listIssuesPage.open()
+        await browser.pause(2000)
     })
 
-    it('Isssue title should be edited', async () => { //Заголовок отредактирован
-        await listIssuesPage.openIssue()
+    it('Isssue title should be edited', async () => {
+        await listIssuesPage.openIssue() //искать issue из списка
         await issuePage.editIssue(issue)
 
         const getTextEditedTitleIssue: string = await issuePage.getTextTitleIssue()
-        expect(getTextEditedTitleIssue).toHaveText(issue.title)
+        expect(getTextEditedTitleIssue).toEqual(issue.title)
     })
 
-    it('Сomment should be added to the issue', async () => { //поправить название теста
-        await issuePage.addCommentToIssue(issue)
+    it('Сomment should be added to the issue', async () => {
+        await issuePage.addCommentToIssue(issue) //явно указать открытие issue
 
         const getTextAddedNewComment: string = await issuePage.getTextAddedNewComment()
-        expect(getTextAddedNewComment).toHaveText(issue.comment)
+        expect(getTextAddedNewComment).toEqual(issue.comment) //поправить на toEqual
     })
 
-    it('Issue should be closed', async () => { //поправить название теста
+    it('Issue should be closed', async () => {
         await issuePage.setButtonCloseIssue()
 
         const getTextNotificationCloseIssue: string = await issuePage.getTextNotificationIssue()
-        expect(getTextNotificationCloseIssue).toHaveText('completed')
+        expect(getTextNotificationCloseIssue).toEqual(`${StateType.completed}`)
     })
 
-    it('Issue should be reopened', async () => { //поправить название теста
+    it('Issue should be reopened', async () => {
         await issuePage.setButtonCloseIssue()
         await issuePage.setButtonReopenedIssue()
 
         const getTextNotificationReopenedIssue: string = await issuePage.getTextNotificationIssue()
-        expect(getTextNotificationReopenedIssue).toHaveText('reopened')
+        expect(getTextNotificationReopenedIssue).toEqual(`${StateType.reopened}`)
     })
 
-    it('Issue should be deleted', async () => { //поправить название теста
+    it('Issue should be deleted', async () => {
         await issuePage.deleteIssue()
 
         const getTextNotificationDeleteIssue: string = await issuePage.getTextNotificationDeleteIssue()
-        expect(getTextNotificationDeleteIssue).toHaveText('deleted')
+        expect(getTextNotificationDeleteIssue).toEqual('deleted') //найти задачу по тексту toEqual(false)
     })
 
     it('Comment should be locked', async () => {
-        await issuePage.setButtonLockComment()
+        await issuePage.setButtonLockComment() //передавать issue
         await issuePage.setPopupReasonList(ReasonType.Offtopic)
         await issuePage.setPopupButtonLockComment()
 
         const getTextNotificationLockComment: string = await issuePage.getTextNotificationLockComment()
-        expect(getTextNotificationLockComment).toHaveText(`locked as ${ReasonType.Offtopic}`)
+        expect(getTextNotificationLockComment).toEqual(`locked as ${ReasonType.Offtopic}`)
     })
 })

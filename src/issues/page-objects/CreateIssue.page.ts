@@ -73,7 +73,7 @@ class CreateIssuePage extends PageObject {
     public async createIssueWithAttach(issue: IssueModel): Promise<void> {
         await this.setButtonCreateIssue()
         await this.setTitleIssue(issue.title)
-        await this.uploadAttach(ATTACH_PATH) //Attach_path хранить в модели
+        await this.uploadAttach(issue.attach) //Attach_path хранить в модели
         await this.submitIssue()
     }
 

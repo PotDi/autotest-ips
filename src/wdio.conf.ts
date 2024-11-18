@@ -1,4 +1,4 @@
-export const config: WebdriverIO.Config = {   
+export const config: WebdriverIO.Config = {
     autoCompileOpts: {
         autoCompile: true,
         tsNodeOpts: {
@@ -19,7 +19,15 @@ export const config: WebdriverIO.Config = {
     waitforTimeout: 20000,
     connectionRetryTimeout: 60000,
     connectionRetryCount: 3,
-    services: ['chromedriver'],
+    services: ['chromedriver',
+        ['image-comparison', {
+            autoSaveBaseline: true,
+            clearRuntimeFolder: true,
+            baseline: `./references-screenshots`,
+            formatImageName: '{tag}-{browserName}',
+            screenshotPath: `./actual-screenshots`,
+        }]
+    ],
     reporters: ['spec'],
     framework: 'mocha',
     mochaOpts: {

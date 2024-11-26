@@ -7,44 +7,43 @@ import { labelData } from '../../model/label.model'
 
 const OWNER = 'PotDi'
 const REPOSITORY = 'autotest-ips'
-const LABELS = ['baguly']
-const NAME =
+const LABELS = 'baguly'
 
-    describe('Create label', () => {
-        const issueAPIProvider = new IssueAPIProvider({
-            isSuccesfulResponse: false
-        })
-        it('Label should be created, code is OK', async () => { //добавить кейсы без описания, без цвета
-            const data: CreateLabelRequest = {
-                name: labelData.name,
-                description: labelData.description,
-                color: labelData.color //передавать из модели
-            }
-            const response: AxiosResponse<CreateLabelResponse> = await issueAPIProvider.createLabel(OWNER, REPOSITORY, data)
-
-            expect(response.status).toEqual(201)
-            expect(response.data.name).toEqual(data.name)
-            expect(response.data.description).toEqual(data.description)
-            expect(response.data.color).toEqual(data.color)
-        })
-
-        it('Label should be created without color, code is OK', async () => {
-            const data: CreateLabelRequest = {
-                name: labelData.name,
-                description: labelData.description,
-            }
-            const response: AxiosResponse<CreateLabelResponse> = await issueAPIProvider.createLabel(OWNER, REPOSITORY, data)
-
-            expect(response.status).toEqual(201)
-            expect(response.data.name).toEqual(data.name)
-            expect(response.data.description).toEqual(data.description)
-            expect(response.data.color).toEqual(data.color)
-        })
-
-        it.only('Label should be deleted', async () => {
-            const response: AxiosResponse<void> = await issueAPIProvider.deleteLabel(OWNER, REPOSITORY, LABELS)
-            const getListLabels: AxiosResponse<void> = await issueAPIProvider.getListLabelsForIssue(OWNER, REPOSITORY, name)
-
-            expect(response.status).toEqual(204) //проверить что удалился лейбл (UI или API)
-        })
+describe('Create label', () => {
+    const issueAPIProvider = new IssueAPIProvider({
+        isSuccesfulResponse: false
     })
+    it('Label should be created, code is OK', async () => { //добавить кейсы без описания, без цвета
+        const data: CreateLabelRequest = {
+            name: labelData.name.join(' '),
+            description: labelData.description,
+            color: labelData.color //передавать из модели
+        }
+        const response: AxiosResponse<CreateLabelResponse> = await issueAPIProvider.createLabel(OWNER, REPOSITORY, data)
+
+        expect(response.status).toEqual(201)
+        expect(response.data.name).toEqual(data.name)
+        expect(response.data.description).toEqual(data.description)
+        expect(response.data.color).toEqual(data.color)
+    })
+
+    it('Label should be created without color, code is OK', async () => {
+        const data: CreateLabelRequest = {
+            name: labelData.name.join(' '),
+            description: labelData.description,
+        }
+        const response: AxiosResponse<CreateLabelResponse> = await issueAPIProvider.createLabel(OWNER, REPOSITORY, data)
+
+        expect(response.status).toEqual(201)
+        expect(response.data.name).toEqual(data.name)
+        expect(response.data.description).toEqual(data.description)
+        expect(response.data.color).toBeNull()
+    })
+
+    it.only('Label should be deleted', async () => {
+        const response: AxiosResponse<void> = await issueAPIProvider.deleteLabel(OWNER, REPOSITORY, LABELS)
+        const getListLabels: AxiosResponse<void> = await issueAPIProvider.getListLabelsForIssue(OWNER, REPOSITORY, number)
+
+        expect(response.status).toEqual(204) //проверить что удалился лейбл (UI или API)
+    })
+})

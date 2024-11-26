@@ -41,7 +41,16 @@ class IssueAPIProvider extends GitAPIProvider {
         return this.sendRequest(config)
     }
 
-    public async deleteLabel<T>(owner: string, repository: string, name: string[]): Promise<AxiosResponse<T>> {
+    public async getListIssue<T>(): Promise<AxiosResponse<T>> {
+        const config: AxiosRequestConfig = this.configureRequest(
+            '/issues',
+            'GET',
+            JSON.stringify(data)
+        )
+        return this.sendRequest(config)
+    }
+
+    public async deleteLabel<T>(owner: string, repository: string, name: string): Promise<AxiosResponse<T>> {
         const config: AxiosRequestConfig = this.configureRequest(
             `/repos/${owner}/${repository}/labels/${name}`,
             'DELETE'

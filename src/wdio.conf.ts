@@ -23,7 +23,7 @@ export const config: WebdriverIO.Config = {
         ['image-comparison', {
             autoSaveBaseline: true,
             clearRuntimeFolder: true,
-            baseline: `./references-screenshots`,
+            baselineFolder: `./references-screenshots`,
             formatImageName: '{tag}-{browserName}',
             screenshotPath: `./actual-screenshots`,
         }]

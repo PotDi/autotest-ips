@@ -4,3 +4,4 @@ src/secrets/credential.ts
 src/users/data/user.data.ts
 /allure-results
 /src/test/test-case
+/actual-screenshots

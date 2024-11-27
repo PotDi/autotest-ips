@@ -7,7 +7,7 @@ import { labelData } from '../../model/label.model'
 
 const OWNER = 'PotDi'
 const REPOSITORY = 'autotest-ips'
-const LABELS = 'baguly'
+const LABELS = labelData.name.join(' ')
 
 describe('Create label', () => {
     const issueAPIProvider = new IssueAPIProvider({
@@ -15,7 +15,7 @@ describe('Create label', () => {
     })
     it('Label should be created, code is OK', async () => { //добавить кейсы без описания, без цвета
         const data: CreateLabelRequest = {
-            name: labelData.name.join(' '),
+            name: LABELS,
             description: labelData.description,
             color: labelData.color //передавать из модели
         }
@@ -29,7 +29,7 @@ describe('Create label', () => {
 
     it('Label should be created without color, code is OK', async () => {
         const data: CreateLabelRequest = {
-            name: labelData.name.join(' '),
+            name: LABELS,
             description: labelData.description,
         }
         const response: AxiosResponse<CreateLabelResponse> = await issueAPIProvider.createLabel(OWNER, REPOSITORY, data)

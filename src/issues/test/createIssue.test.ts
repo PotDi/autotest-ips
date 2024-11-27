@@ -23,12 +23,13 @@ describe('Create Issue', () => {
         loginPage = new LoginPage(browser)
         createIssuePage = new CreateIssuePage(browser)
         issuePage = new IssuePage(browser)
+        listIssuesPage = new ListIssuesPage(browser)
         await loginPage.open()
         await loginPage.login(user)
     })
 
     beforeEach(async () => {
-        await createIssuePage.open()
+        await listIssuesPage.open()
     })
 
     it('Issue was created with title and description', async () => {

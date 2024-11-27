@@ -6,6 +6,7 @@ type CreateLabelResponse = {
 
 type CreateIssueResponse = {
     state: string,
+    number: number,
     title: string,
     body: string | null,
     labels: string,

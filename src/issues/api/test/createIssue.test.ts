@@ -7,16 +7,19 @@ import { labelData } from "../../model/label.model"
 
 const OWNER = 'PotDi'
 const REPOSITORY = 'autotest-ips'
+const LABELS = labelData.name.join(' ')
 
 
 describe('Create issue', () => {
     const issue: IssueModel = createIssueModel()
-
+    const issueAPIProvider = new IssueAPIProvider({
+        isSuccesfulResponse: false
+    })
     it.only('Issue with label should be created, code is OK', async () => {
         const data: CreateIssueRequest = {
             title: issue.title,
             body: issue.description,
-            labels: labelData.name[0] //брать из модели
+            labels: labelData.name //брать из модели
         }
         const issueAPIProvider = new IssueAPIProvider({
             isSuccesfulResponse: false
@@ -28,7 +31,6 @@ describe('Create issue', () => {
         expect(response.status).toEqual(201)
         expect(response.data.title).toEqual(data.title)
         expect(response.data.body).toEqual(data.body)
-        expect(response.request.config).toEqual('GET')
         expect(response.data.labels).toEqual(data.labels) //проверить label, body
     })
 
@@ -36,7 +38,7 @@ describe('Create issue', () => {
         const data: CreateIssueRequest = {
             title: issue.title,
             body: issue.description,
-            labels: labelData.name[0] //брать из модели
+            labels: labelData.name //брать из модели
         }
         const issueAPIProvider = new IssueAPIProvider({
             isSuccesfulResponse: false
@@ -50,7 +52,7 @@ describe('Create issue', () => {
         const data: CreateIssueRequest = {
             title: '',
             body: issue.description,
-            labels: ''
+            labels: []
         }
         const issueAPIProvider = new IssueAPIProvider({
             isSuccesfulResponse: false
@@ -64,7 +66,7 @@ describe('Create issue', () => {
         const data: CreateIssueRequest = {
             title: issue.title,
             body: issue.description,
-            labels: labelData.name[0],
+            labels: labelData.name,
         }
         const issueAPIProvider = new IssueAPIProvider({
             isSuccesfulResponse: false
@@ -72,5 +74,12 @@ describe('Create issue', () => {
         const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(OWNER, REPOSITORY, data)
 
         expect(response.status).toEqual(422)
+    })
+
+    it.only('Label should be deleted', async () => {
+        const response: AxiosResponse<void> = await issueAPIProvider.deleteLabel(OWNER, REPOSITORY, LABELS)
+        const getListLabels: AxiosResponse<void> = await issueAPIProvider.getListLabelsForIssue(OWNER, REPOSITORY, number)
+
+        expect(response.status).toEqual(204) //проверить что удалился лейбл (UI или API)
     })
 })

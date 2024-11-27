@@ -7,7 +7,7 @@ type CreateLabelRequest = {
 type CreateIssueRequest = {
     title: string,
     body: string,
-    labels: string,
+    labels: string[],
 }
 
 type SetLabelRequest = {

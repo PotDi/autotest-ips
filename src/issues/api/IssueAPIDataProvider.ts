@@ -1,21 +1,22 @@
-type CreateLabelRequest = {
-    name: string,
-    description?: string,
-    color?: string,
-}
+import { IssueModel } from "../model/issue.model"
 
 type CreateIssueRequest = {
     title: string,
-    body: string,
-    labels: string[],
+    body?: string,
+    labels?: string,
 }
 
-type SetLabelRequest = {
-    labels: string[],
+class IssueAPIDataProvider {
+    public static getCreationIssueData(issue: IssueModel): CreateIssueRequest {
+        return {
+            title: issue.title,
+            body: issue.description,
+            labels: issue.label.name,
+        }
+    }
 }
 
 export {
-    CreateLabelRequest,
     CreateIssueRequest,
-    SetLabelRequest,
+    IssueAPIDataProvider,
 }

@@ -1,8 +1,7 @@
 import { AxiosResponse } from 'axios'
-import { CreateLabelRequest } from '../IssueAPIDataProvider'
-import { IssueAPIProvider } from '../issueAPIProvider'
-import { CreateLabelResponse } from '../issueAPIService'
-import { data } from '../../../secrets/credential'
+import { CreateLabelRequest } from '../LabelAPIDataProvider'
+import { IssueAPIProvider } from '../IssueAPIProvider'
+import { CreateLabelResponse } from '../LabelAPIService'
 import { labelData } from '../../model/label.model'
 
 const OWNER = 'PotDi'
@@ -31,6 +30,19 @@ describe('Create label', () => {
         const data: CreateLabelRequest = {
             name: LABELS,
             description: labelData.description,
+        }
+        const response: AxiosResponse<CreateLabelResponse> = await issueAPIProvider.createLabel(OWNER, REPOSITORY, data)
+
+        expect(response.status).toEqual(201)
+        expect(response.data.name).toEqual(data.name)
+        expect(response.data.description).toEqual(data.description)
+        expect(response.data.color).toBeNull()
+    })
+
+    it('Label should be created without description, code is OK', async () => {
+        const data: CreateLabelRequest = {
+            name: LABELS,
+            color: labelData.color, //передавать из модели
         }
         const response: AxiosResponse<CreateLabelResponse> = await issueAPIProvider.createLabel(OWNER, REPOSITORY, data)
 

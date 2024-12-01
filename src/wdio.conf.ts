@@ -28,10 +28,24 @@ export const config: WebdriverIO.Config = {
             screenshotPath: `./actual-screenshots`,
         }]
     ],
-    reporters: ['spec'],
+    reporters: ['spec',
+        ['allure', {
+            outputDir: 'allure-results',
+            disableWebdriverStepsReporting: true,
+        }],
+    ],
     framework: 'mocha',
     mochaOpts: {
         ui: 'bdd',
         timeout: 60000
     },
+    afterTest: async function (
+        test: unknown,
+        context: unknown,
+        result: { error?: unknown, duration: unknown, passed: unknown }
+    ) {
+        if (result.error) {
+            await browser.takeScreenshot()
+        }
+    }
 }

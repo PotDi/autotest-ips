@@ -29,13 +29,14 @@ describe('Edit Issue', () => {
         issue = createIssueModel()
         const listIssuesPage: ListIssuesPage = new ListIssuesPage(browser) //listIssues
         listIssuesPage.createIssue(issue) //перенести createIssue в ListIssuePage 
+        issue.url = await browser.getUrl()
         await browser.pause(5000)
         await listIssuesPage.open()
         await browser.pause(2000)
     })
 
     it('Isssue title should be edited', async () => {
-        await listIssuesPage.openIssue() //искать issue из списка
+        await listIssuesPage.openIssue(issue.url) //искать issue из списка
         await issuePage.editIssue(issue)
 
         const getTextEditedTitleIssue: string = await issuePage.getTextTitleIssue()
@@ -43,6 +44,7 @@ describe('Edit Issue', () => {
     })
 
     it('Сomment should be added to the issue', async () => {
+        await listIssuesPage.openIssue(issue.url)
         await issuePage.addCommentToIssue(issue) //явно указать открытие issue
 
         const getTextAddedNewComment: string = await issuePage.getTextAddedNewComment()
@@ -68,12 +70,13 @@ describe('Edit Issue', () => {
         await issuePage.deleteIssue()
 
         const getTextNotificationDeleteIssue: string = await issuePage.getTextNotificationDeleteIssue()
+        //искать по title задачи
         expect(getTextNotificationDeleteIssue).toEqual('deleted') //найти задачу по тексту toEqual(false)
     })
 
     it('Comment should be locked', async () => {
         await issuePage.setButtonLockComment() //передавать issue
-        await issuePage.setPopupReasonList(ReasonType.Offtopic)
+        await issuePage.setPopupReasonList(ReasonType.Offtopic) //ключи с большой буквы
         await issuePage.setPopupButtonLockComment()
 
         const getTextNotificationLockComment: string = await issuePage.getTextNotificationLockComment()

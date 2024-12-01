@@ -18,6 +18,4 @@ class LabelAPIService {
     }
 }
 
-export {
-    LabelAPIService,
-}
+export { LabelAPIService, CreateLabelResponse, }

@@ -23,5 +23,5 @@ class LabelAPIDataProvider {
 export {
     LabelAPIDataProvider,
     CreateLabelRequest,
-    SetLabelRequest,
+    SetLabelRequest
 }

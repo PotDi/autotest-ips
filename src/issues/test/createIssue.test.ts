@@ -7,6 +7,7 @@ import { createIssueModel, IssueModel } from "../model/issue.model"
 import { CreateIssuePage } from "../page-objects/CreateIssue.page"
 import { IssuePage } from "../page-objects/Issue.page"
 import { ListIssuesPage } from "../page-objects/ListIssues.page"
+import { labelData } from "../model/label.model"
 
 describe('Create Issue', () => {
     let loginPage: LoginPage
@@ -38,7 +39,7 @@ describe('Create Issue', () => {
         const getTextTitleIssue: string = await issuePage.getTextTitleIssue()
         const getTextDerscriptionIssue: string = await issuePage.getTextDerscriptionIssue()
         expect(getTextTitleIssue).toHaveText(issue.title)
-        expect(getTextDerscriptionIssue).toHaveText(issue.description)
+        expect(getTextDerscriptionIssue).toHaveText(issue.description!)
     })
 
     it("Can't create issue with an empty title", async () => {
@@ -46,22 +47,22 @@ describe('Create Issue', () => {
         await createIssuePage.setButtonCreateIssue()
         await createIssuePage.setTitleIssue(issue.title)
 
-        expect(createIssuePage.submitIssue).toBeDisabled()
+        expect(createIssuePage.submitIssue).toBeDisabled() //переделать что кнопка задизаблена
     })
 
     it('Issue should be create with labels', async () => {
         await createIssuePage.createIssueWithLabels(issue)
 
-        const isDisplayedLabelIssue: boolean = await issuePage.isDisplayedLabelIssue()
+        const isDisplayedLabelIssue: boolean = await listIssuesPage.isDisplayedLabelIssue(labelData)
         expect(isDisplayedLabelIssue).toEqual(true)
     })
 
     it('Issue should be create with attach ', async () => {
-        await createIssuePage.createIssueWithAttach(issue)
+        await createIssuePage.createIssueWithAttach(issueWithAttach)
 
-        const fileName = path.basename(ATTACH_PATH) //хранить в модели
+        const fileName = path.basename(ATTACH_PATH)
         const getNameAttachComment: string = await issuePage.getNameAttachComment()
-        expect(getNameAttachComment).toHaveText(fileName) //toEqual
+        expect(getNameAttachComment).toHaveText(fileName)
     })
 
 })

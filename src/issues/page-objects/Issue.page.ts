@@ -2,6 +2,7 @@ import { PageObject } from "../../page-objects/PageObject"
 import { ChainablePromiseElement } from 'webdriverio'
 import { IssueModel } from "../model/issue.model"
 import { ReasonType } from "../types/types"
+import { Reporter } from "../../common/reporter/Reporter"
 
 class IssuePage extends PageObject {
     protected url: string = 'https://github.com/PotDi/autotest-ips/issues/'
@@ -114,11 +115,6 @@ class IssuePage extends PageObject {
         })
         return this.getNotificationLockComment().getText()
     }
-
-    public async isDisplayedLabelIssue(): Promise<boolean> {
-        return this.getLabelIssue().isDisplayed()
-    }
-
     public async getNameAttachComment(): Promise<string> {
         await this.getAttachComment().waitForDisplayed({
             timeoutMsg: 'Attach was not displayed'
@@ -148,18 +144,26 @@ class IssuePage extends PageObject {
     }
 
     public async editIssue(issue: IssueModel): Promise<void> {
+
+        Reporter.addStep('Нажать на кнопку редактирования задачи')
         await this.setButtonEditTitle()
+        Reporter.addStep('Отредактировать заголовок задачи') //добавить issue.title
         await this.setEditTitle(issue.title)
+        Reporter.addStep('Нажать кнопку Сохранить')
         await this.setButtonSave()
     }
 
     public async addCommentToIssue(issue: IssueModel): Promise<void> {
-        await this.setComment(issue.comment)
+        Reporter.addStep(`Заполнить поле с комментарием ${issue.comment}`)
+        await this.setComment(issue.comment!)
+        Reporter.addStep('Нажать на кнопку Добавить комментарий')
         await this.setButtonAddComment()
     }
 
     public async deleteIssue(): Promise<void> {
+        Reporter.addStep('Нажать на кнопку Удалить задачу')
         await this.setButtonDeleteIssue()
+        Reporter.addStep('В попапе подтвердить удаление')
         await this.setPopupButtonDeleteIssue()
     }
 
@@ -221,10 +225,6 @@ class IssuePage extends PageObject {
 
     private getAttachComment(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//p[@dir="auto"]/a')
-    }
-
-    private getLabelIssue(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('(//*[contains(@id, "label")])[last()]')
     }
 
     private getButtonLockComment(): ChainablePromiseElement<WebdriverIO.Element> {

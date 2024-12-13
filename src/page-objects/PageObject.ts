@@ -28,6 +28,7 @@ async function showHiddenFileInput(browser: WebdriverIO.Browser): Promise<void> 
     await browser.execute(() => {
         const htmlElement = document.querySelector('[type="file"]') as HTMLElement
         htmlElement.style.cssText = 'display:block !important; opacity: 1; position: inherit;'
+        console.log(htmlElement)
     })
 }
 

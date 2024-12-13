@@ -1,64 +1,51 @@
-import { AxiosResponse } from "axios"
+import { AxiosRequestConfig, AxiosResponse } from "axios"
 import { createIssueModel, IssueModel } from "../../model/issue.model"
-import { CreateIssueRequest } from "../IssueAPIDataProvider"
+import { CreateIssueRequest, IssueAPIDataProvider } from "../IssueAPIDataProvider"
 import { IssueAPIProvider } from "../IssueAPIProvider"
-import { CreateIssueResponse } from "../IssueAPIService"
+import { CreateIssueResponse, GetListIssuesResponse, IssueAPIService } from "../IssueAPIService"
 import { labelData } from "../../model/label.model"
-
-const OWNER = 'PotDi'
-const REPOSITORY = 'autotest-ips'
-
+import { owner, repo, repository } from "../../../secrets/credential"
 
 describe('Create issue', () => {
-    const issue: IssueModel = createIssueModel()
-    const issueAPIProvider = new IssueAPIProvider({
+    const issue: IssueModel = createIssueModel({
+        labels: []
+    })
+    const issueAPIProvider: IssueAPIProvider = new IssueAPIProvider({
         isSuccesfulResponse: false
     })
 
-    it.only('Issue with label should be created, code is OK', async () => {
-        const data: CreateIssueRequest = {
-            title: issue.title,
-            body: issue.description,
-            labels: labelData.name //брать из модели
-        }
-        const issueAPIProvider = new IssueAPIProvider({ //добавить типы
-            isSuccesfulResponse: false
-        })
-        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(OWNER, REPOSITORY, data)
+    it('Issue with label should be created, code is OK, method is GET', async () => {
+        const data: CreateIssueRequest = IssueAPIDataProvider.getCreationIssueData(issue)
+        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(owner, repository, data)
 
         expect(response.status).toEqual(201)
-        expect(response.data.title).toEqual(data.title)
-        expect(response.data.body).toEqual(data.body)
-        expect(response.data.labels).toEqual(data.labels) //проверить label, body
-        //добавить проверку найти созданную задачу в списке задач
+        expect(response.data.title).toEqual(issue.title)
+        expect(response.data.body).toEqual(issue.description)
+        expect(response.data.labels).toEqual(issue.labels?.map(label => label.name))
+        const issueList: GetListIssuesResponse[] = await IssueAPIService.getListIssue(owner, repository)
+        expect(issueList.some(item => item.title === issue.title)).toEqual(true)
     })
 
     it('Issue without label should be created, code is OK', async () => {
         const data: CreateIssueRequest = {
             title: issue.title,
             body: issue.description,
+            labels: []
         }
-        const issueAPIProvider = new IssueAPIProvider({
-            isSuccesfulResponse: false
-        })
-        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(OWNER, REPOSITORY, data)
+        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(owner, repository, data)
 
         expect(response.status).toEqual(201)
         expect(response.data.title).toEqual(data.title)
         expect(response.data.body).toEqual(data.body)
-        expect(response.data.labels).toEqual(data.labels) //проверить на пустое значение
+        expect(response.data.labels).toEqual(data.labels)
     })
 
     it('Issue should not be created, code is Gone', async () => {
         const data: CreateIssueRequest = {
-            title: issue.title,
-            body: issue.description,
-            labels: [labelData.name] //брать из модели
+            title: issue.title
         }
-        const issueAPIProvider = new IssueAPIProvider({
-            isSuccesfulResponse: false
-        })
-        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(OWNER, REPOSITORY, data) //указать новый репозиторий без Issue
+
+        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(owner, repo, data)
 
         expect(response.status).toEqual(410)
     })
@@ -66,28 +53,38 @@ describe('Create issue', () => {
     it('Issue should not be created, code is Bad Request', async () => {
         const data: CreateIssueRequest = {
             title: '',
-            body: issue.description,
-            labels: []
         }
         const issueAPIProvider = new IssueAPIProvider({
             isSuccesfulResponse: false
         })
-        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(OWNER, REPOSITORY, data)
+        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(owner, repository, data)
 
-        expect(response.status).toEqual(400)
+        expect(response.status).toEqual(422)
+    })
+
+    it('Issue should not be created, code is Bad Request', async () => {
+        const data: {} = {}
+
+        const issueAPIProvider = new IssueAPIProvider({
+            isSuccesfulResponse: false
+        })
+        const config: AxiosRequestConfig = issueAPIProvider.configureRequest(
+            `/repos/${owner}/${repository}/issues`,
+            'POST',
+            JSON.stringify(data)
+        )
+        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.sendRequest(config)
+
+        expect(response.status).toEqual(422)
     })
 
     it('Issue should not be created, code is Validation failed', async () => {
         const data: CreateIssueRequest = {
             title: issue.title,
-            body: issue.description,
-            labels: [labelData.name],
         }
-        const issueAPIProvider = new IssueAPIProvider({
-            isSuccesfulResponse: false
-        })
-        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(OWNER, `%${REPOSITORY}`, data)
 
-        expect(response.status).toEqual(422)
+        const response: AxiosResponse<CreateIssueResponse> = await issueAPIProvider.createIssue(owner, `%${repository}`, data)
+
+        expect(response.status).toEqual(400)
     })
 })

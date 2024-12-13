@@ -1,6 +1,8 @@
 import { PageObject } from "../../page-objects/PageObject"
 import { ChainablePromiseElement } from 'webdriverio'
 import { IssueModel } from "../model/issue.model"
+import { Reporter } from "../../common/reporter/Reporter"
+import { LabelModel } from "../model/label.model"
 
 class ListIssuesPage extends PageObject {
     protected url: string = 'https://github.com/PotDi/autotest-ips/issues'
@@ -9,7 +11,7 @@ class ListIssuesPage extends PageObject {
         super(browser)
     }
 
-    public async openIssue(): Promise<void> {
+    public async openIssue(url: string): Promise<void> {
         await this.getOpenIssue().waitForClickable({
             timeoutMsg: 'Issue was not clickable'
         })
@@ -36,6 +38,11 @@ class ListIssuesPage extends PageObject {
         })
         await this.getTitleField().setValue(title)
     }
+
+    public async isDisplayedLabelIssue(label: LabelModel): Promise<boolean> {
+        return this.getLabelIssue(label.name).isDisplayed()
+    }
+
     public async setDescriptionIssue(description: string): Promise<void> {
         await this.getDescriptionField().waitForDisplayed({
             timeoutMsg: 'Input description Issue was not displayed'
@@ -51,9 +58,13 @@ class ListIssuesPage extends PageObject {
     }
 
     public async createIssue(issue: IssueModel): Promise<void> {
+        Reporter.addStep('Нажать на кнопку Создание задачи')
         await this.setButtonCreateIssue()
+        Reporter.addStep('Ввести название задачи')
         await this.setTitleIssue(issue.title)
-        await this.setDescriptionIssue(issue.description)
+        Reporter.addStep('Ввести описание задачи')
+        await this.setDescriptionIssue(issue.description!)
+        Reporter.addStep('Нажать кнопку создания задачи')
         await this.submitIssue()
     }
 
@@ -75,6 +86,11 @@ class ListIssuesPage extends PageObject {
 
     private getDescriptionField(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[@id="issue_body"]')
+    }
+
+
+    private getLabelIssue(label: string): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$(`(//*[contains(text(), "${label}")])`)
     }
 
     private getSubmitIssue(): ChainablePromiseElement<WebdriverIO.Element> {

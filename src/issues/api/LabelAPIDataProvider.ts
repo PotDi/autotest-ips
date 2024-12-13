@@ -13,7 +13,7 @@ type SetLabelRequest = {
 class LabelAPIDataProvider {
     public static getCreationLabelData(label: LabelModel): CreateLabelRequest {
         return {
-            name: label.name, //вынести из issue model всё что касается label
+            name: label.name,
             color: label.color,
             description: label.description,
         }

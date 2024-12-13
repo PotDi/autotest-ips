@@ -7,10 +7,11 @@ enum ReasonType {
 }
 
 enum StateType {
-    completed = 'completed',
-    reopened = 'reopened',
-    deleted = 'deleted',
+    Completed = 'completed',
+    Reopened = 'reopened',
+    Deleted = 'deleted',
 }
+
 
 export {
     ReasonType,

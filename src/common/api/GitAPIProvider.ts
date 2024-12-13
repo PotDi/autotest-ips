@@ -20,7 +20,7 @@ class GitAPIProvider {
         }
     }
 
-    protected configureRequest(
+    public configureRequest(
         url: string,
         method: Method,
         data?: string | FormData,
@@ -33,7 +33,7 @@ class GitAPIProvider {
         }
     }
 
-    protected sendRequest<T>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    public sendRequest<T>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         if (!this.isSuccesfulResponse) {
             config['validateStatus'] = status => Boolean(status)
         }

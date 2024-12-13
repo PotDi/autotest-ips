@@ -27,16 +27,14 @@ describe('Edit Issue', () => {
 
     beforeEach(async () => {
         issue = createIssueModel()
-        const listIssuesPage: ListIssuesPage = new ListIssuesPage(browser) //listIssues
-        listIssuesPage.createIssue(issue) //перенести createIssue в ListIssuePage 
+        const listIssuesPage: ListIssuesPage = new ListIssuesPage(browser)
+        listIssuesPage.createIssue(issue)
         issue.url = await browser.getUrl()
-        await browser.pause(5000)
         await listIssuesPage.open()
-        await browser.pause(2000)
     })
 
     it('Isssue title should be edited', async () => {
-        await listIssuesPage.openIssue(issue.url) //искать issue из списка
+        await listIssuesPage.openIssue(issue.url!) //искать issue из списка
         await issuePage.editIssue(issue)
 
         const getTextEditedTitleIssue: string = await issuePage.getTextTitleIssue()
@@ -44,7 +42,7 @@ describe('Edit Issue', () => {
     })
 
     it('Сomment should be added to the issue', async () => {
-        await listIssuesPage.openIssue(issue.url)
+        await listIssuesPage.openIssue(issue.url!)
         await issuePage.addCommentToIssue(issue) //явно указать открытие issue
 
         const getTextAddedNewComment: string = await issuePage.getTextAddedNewComment()
@@ -55,7 +53,7 @@ describe('Edit Issue', () => {
         await issuePage.setButtonCloseIssue()
 
         const getTextNotificationCloseIssue: string = await issuePage.getTextNotificationIssue()
-        expect(getTextNotificationCloseIssue).toEqual(`${StateType.completed}`)
+        expect(getTextNotificationCloseIssue).toEqual(`${StateType.Completed}`)
     })
 
     it('Issue should be reopened', async () => {
@@ -63,13 +61,13 @@ describe('Edit Issue', () => {
         await issuePage.setButtonReopenedIssue()
 
         const getTextNotificationReopenedIssue: string = await issuePage.getTextNotificationIssue()
-        expect(getTextNotificationReopenedIssue).toEqual(`${StateType.reopened}`)
+        expect(getTextNotificationReopenedIssue).toEqual(`${StateType.Reopened}`)
     })
 
     it('Issue should be deleted', async () => {
         await issuePage.deleteIssue()
 
-        const getTextNotificationDeleteIssue: string = await issuePage.getTextNotificationDeleteIssue()
+        const getTextNotificationDeleteIssue: string = await issuePage.getTextTitleIssue()
         //искать по title задачи
         expect(getTextNotificationDeleteIssue).toEqual('deleted') //найти задачу по тексту toEqual(false)
     })

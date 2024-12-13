@@ -1,8 +1,9 @@
 import { PageObject } from "../../page-objects/PageObject";
 import { ChainablePromiseArray, ChainablePromiseElement, ElementArray } from 'webdriverio';
 import { IssueModel } from "../model/issue.model";
-import { ATTACH_PATH } from "../../common/data/image.data";
 import { LabelModel } from "../model/label.model";
+import { Reporter } from "../../common/reporter/Reporter";
+import { ATTACH_PATH } from "../../common/data/image.data";
 
 class CreateIssuePage extends PageObject {
     protected url: string = 'https://github.com/PotDi/autotest-ips/issues/new'
@@ -32,11 +33,11 @@ class CreateIssuePage extends PageObject {
         await this.getButtonLabels().click()
     }
 
-    public async setChoiceLabels(label?: LabelModel): Promise<void> {
-        await this.getLabels().waitForClickable({
+    public async setChoiceLabels(label: LabelModel): Promise<void> {
+        await this.getLabels(label.name).waitForClickable({
             timeoutMsg: 'Button Labels was not clickable'
         })
-        await this.getLabels().click()
+        await this.getLabels(label.name).click()
     }
 
     public async setDescriptionIssue(description: string): Promise<void> {
@@ -61,19 +62,43 @@ class CreateIssuePage extends PageObject {
     }
 
     public async createIssueWithLabels(issue: IssueModel): Promise<void> {
+        Reporter.addStep('Нажать кнопку создания задачи')
         await this.setButtonCreateIssue()
+        Reporter.addStep('Заполнить название задачи')
         await this.setTitleIssue(issue.title)
-        await this.setDescriptionIssue(issue.description)
+        Reporter.addStep('Заполнить описание задачи')
+        await this.setDescriptionIssue(issue.description!)
+        Reporter.addStep('Нажать кнопку выбора лейбла')
         await this.setButtonLabels()
-        await this.setChoiceLabels(issue.label)
+        Reporter.addStep('Выбрать лейбл')
+        await this.setChoiceLabels(issue.labels![0])
         await this.setBody()
+        Reporter.addStep('Нажать на кнопку Создание задачи')
         await this.submitIssue()
     }
 
+    public async manageIssueLabel(label: LabelModel): Promise<void> {
+        await this.setButtonLabels()
+        await this.setChoiceLabels(label)
+        await this.setBody()
+        await this.browser.pause(3000)
+    }
+
     public async createIssueWithAttach(issue: IssueModel): Promise<void> {
+        Reporter.addStep('Нажать кнопку создания задачи')
         await this.setButtonCreateIssue()
+        Reporter.addStep('Заполнить описание задачи')
         await this.setTitleIssue(issue.title)
-        await this.uploadAttach(issue.attach) //Attach_path хранить в модели
+        Reporter.addStep('Прикрепить файл к комментарию')
+        await this.uploadAttach(ATTACH_PATH)
+        Reporter.addStep('Нажать на кнопку Создание задачи')
+        await this.submitIssue()
+    }
+
+    public async setLabel(label: LabelModel): Promise<void> {
+        await this.setButtonLabels()
+        await this.setChoiceLabels(label)
+        await this.setBody()
         await this.submitIssue()
     }
 
@@ -94,11 +119,11 @@ class CreateIssuePage extends PageObject {
     }
 
     private getButtonLabels(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//*[@data-cache-name="labels"]/details')
+        return this.browser.$('//*[@id="labels-select-menu"]')
     }
 
-    private getLabels(): ChainablePromiseElement<WebdriverIO.Element> {
-        return this.browser.$('//*[@role="menuitemcheckbox"][1]')
+    private getLabels(label: string): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$(`//label//*[contains(text(), "${label}")]`)
     }
 
     private getBody(): ChainablePromiseElement<WebdriverIO.Element> {

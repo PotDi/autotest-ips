@@ -3,7 +3,6 @@ import { createUserModel, UserModel } from "../../users/model/user.model"
 import { LoginPage } from "../../users/page-objects/Login.page"
 import { createIssueModel, IssueModel } from "../model/issue.model"
 import { CreateIssuePage } from "../page-objects/CreateIssue.page"
-import { IssuePage } from "../page-objects/Issue.page"
 import { ListIssuesPage } from "../page-objects/ListIssues.page"
 
 describe('Create Issue', () => {

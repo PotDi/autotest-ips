@@ -15,7 +15,9 @@ describe('Compare Image in Issue', () => {
     let createIssuePage: CreateIssuePage
     let issuePage: IssuePage
     const user: UserModel = createUserModel(userData)
-    const issue: IssueModel = createIssueModel()
+    const issue: IssueModel = createIssueModel({
+        description: '',
+    })
 
     before(async () => {
         loginPage = new LoginPage(browser)
@@ -29,27 +31,28 @@ describe('Compare Image in Issue', () => {
         const response = await IssueAPIService.createIssue(issue, owner, repository)
         issue.url = response.html_url
         await browser.url(issue.url!)
+        await issuePage.editComment()
     })
 
-    for (const image of images) {
-        it(`Compare image ${image} in issue`, async () => {
+    for (let i = 0; i < images.length; i++) {
+        it(`Compare image ${images[i]} in issue`, async () => {
             await showHiddenFileInput(browser)
 
-            const file: string = await browser.uploadFile(image)
-            await browser.$('#fc-new_comment_field').setValue(file)
+            const file: string = await browser.uploadFile(images[i])
             await browser.pause(5000)
-            await issuePage.setButtonAddComment()
+            await browser.$('[type="file"]').setValue(file)
             await browser.pause(5000)
-
-            const result: Result = await browser.checkFullPageScreen(image)
-            expect(result).toEqual(0.2)
+            await issuePage.setButtonUpdateComment()
+            await browser.pause(5000)
+            const result: Result = await browser.checkFullPageScreen(images[i])
+            expect(result).toEqual(5)
         })
     }
 })
 
 async function showHiddenFileInput(browser: WebdriverIO.Browser): Promise<void> {
     await browser.execute(() => {
-        const htmlElement = document.querySelector('#fc-new_comment_field') as HTMLElement
+        const htmlElement = document.querySelector('[type="file"]') as HTMLElement
         htmlElement.removeAttribute('hidden')
     })
 }

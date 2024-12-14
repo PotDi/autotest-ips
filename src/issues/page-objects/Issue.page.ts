@@ -53,11 +53,32 @@ class IssuePage extends PageObject {
         await this.getCommentField().setValue(comment)
     }
 
+    public async setButtonMenuEdit(): Promise<void> {
+        await this.getButtonMenuEdit().waitForClickable({
+            timeoutMsg: 'Button menu edit comment was not clickable'
+        })
+        await this.getButtonMenuEdit().click()
+    }
+
+    public async setButtonEditComment(): Promise<void> {
+        await this.getButtonEditComment().waitForClickable({
+            timeoutMsg: 'Button for edit comment was not displayed'
+        })
+        await this.getButtonEditComment().click()
+    }
+
     public async setButtonAddComment(): Promise<void> {
         await this.getButtonSubmitComment().waitForClickable({
             timeoutMsg: 'Button Add Comment was not clickable'
         })
         await this.getButtonSubmitComment().click()
+    }
+
+    public async setButtonUpdateComment(): Promise<void> {
+        await this.getButtonUpdateComment().waitForClickable({
+            timeoutMsg: 'Button Update comment was not clickable'
+        })
+        await this.getButtonUpdateComment().click()
     }
 
     public async setButtonDeleteIssue(): Promise<void> {
@@ -144,7 +165,6 @@ class IssuePage extends PageObject {
     }
 
     public async editIssue(issue: IssueModel): Promise<void> {
-
         Reporter.addStep('Нажать на кнопку редактирования задачи')
         await this.setButtonEditTitle()
         Reporter.addStep('Отредактировать заголовок задачи') //добавить issue.title
@@ -165,6 +185,11 @@ class IssuePage extends PageObject {
         await this.setButtonDeleteIssue()
         Reporter.addStep('В попапе подтвердить удаление')
         await this.setPopupButtonDeleteIssue()
+    }
+
+    public async editComment(): Promise<void> {
+        await this.setButtonMenuEdit()
+        await this.setButtonEditComment()
     }
 
     private getInputEdit(): ChainablePromiseElement<WebdriverIO.Element> {
@@ -241,6 +266,17 @@ class IssuePage extends PageObject {
 
     private getNotificationLockComment(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('[class="TimelineItem-body"]')
+    }
+
+    private getButtonMenuEdit(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//div/details/summary//*[last()][@role="img"]')
+    }
+
+    private getButtonEditComment(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[contains(@role, "menuitem") and contains(text(), "Edit")]')
+    }
+    private getButtonUpdateComment(): ChainablePromiseElement<WebdriverIO.Element> {
+        return this.browser.$('//*[contains(text(), "Update")]')
     }
 }
 

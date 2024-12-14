@@ -9,7 +9,6 @@ import { images } from "../../common/data/image.data";
 import { owner, repository } from "../../secrets/credential";
 import { IssuePage } from "../page-objects/Issue.page";
 
-
 describe('Compare Image in Issue', () => {
     let loginPage: LoginPage
     let createIssuePage: CreateIssuePage

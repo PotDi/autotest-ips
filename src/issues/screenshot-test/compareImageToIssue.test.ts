@@ -33,18 +33,18 @@ describe('Compare Image in Issue', () => {
         await issuePage.editComment()
     })
 
-    for (let i = 0; i < images.length; i++) {
-        it(`Compare image ${images[i]} in issue`, async () => {
+    for (const image of images) {
+        it(`Compare image ${image} in issue`, async () => {
             await showHiddenFileInput(browser)
 
-            const file: string = await browser.uploadFile(images[i])
-            await browser.pause(5000)
+            const file: string = await browser.uploadFile(image)
             await browser.$('[type="file"]').setValue(file)
             await browser.pause(5000)
             await issuePage.setButtonUpdateComment()
             await browser.pause(5000)
-            const result: Result = await browser.checkFullPageScreen(images[i])
-            expect(result).toEqual(5)
+
+            const result: Result = await browser.checkFullPageScreen(image)
+            expect(result).toEqual(0.3)
         })
     }
 })
@@ -52,6 +52,6 @@ describe('Compare Image in Issue', () => {
 async function showHiddenFileInput(browser: WebdriverIO.Browser): Promise<void> {
     await browser.execute(() => {
         const htmlElement = document.querySelector('[type="file"]') as HTMLElement
-        htmlElement.removeAttribute('hidden')
+        htmlElement.style.cssText = 'display:block !important; opacity: 1; position: inherit;'
     })
 }

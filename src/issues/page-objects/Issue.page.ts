@@ -192,6 +192,22 @@ class IssuePage extends PageObject {
         await this.setButtonEditComment()
     }
 
+    public async uploadFile(image: string): Promise<void> {
+        await this.showHiddenFileInput()
+        const file: string = await browser.uploadFile(image)
+        await this.browser.$('[type="file"]').setValue(file)
+        await this.browser.pause(5000)
+        await this.setButtonUpdateComment()
+        await this.browser.pause(5000)
+    }
+
+    private async showHiddenFileInput(): Promise<void> {
+        await this.browser.execute(() => {
+            const htmlElement = document.querySelector('[type="file"]') as HTMLElement
+            htmlElement.style.cssText = 'display:block !important; opacity: 1; position: inherit;'
+        })
+    }
+
     private getInputEdit(): ChainablePromiseElement<WebdriverIO.Element> {
         return this.browser.$('//*[1][@name="issue[title]"]')
     }
